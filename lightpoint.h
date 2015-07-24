@@ -1,27 +1,35 @@
 /*
-  LightPoint.h - Library for light point control.
+  LightPoint.h - Class implementing light point control.
   Created by Piotr Kaminski, 2015/07/05.
 */
-#ifndef LightPoint_h
-#define LightPoint_h
 
 #include "Arduino.h"
 #include "SiweckiSmartHome.h"
+#include "Point.h"
 
-class LightPoint {
+#ifndef LightPoint_h
+#define LightPoint_h
+
+class LightPoint: public Point {
 	private:
-		int halogenButtonState;
 		int lightPointState;
 		int controlButtonPin;
 		int controlOutputPin;
-		String name;
+    int buttonPreviousState;
+    void setLightPointState(int state);
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
-		void initialize();
-		int checkControlButton();
-		void setLightPointState(int state);
-		String createCommand(int state);
+    ~LightPoint();
+		virtual void initialize();
+		boolean isControlButtonPressed();
+    void setLightPointOn();
+    boolean isLightPointOn();
+    void setLightPointOff();
+    virtual String getObjectName();
+		virtual String createCommand(int state);
+    virtual String createCommand();
+    virtual void verifyControlPoint();
 };
 
 #endif

@@ -5,8 +5,9 @@
 #ifndef SiweckiSmartHome_h
 #define SiweckiSmartHome_h
 
-#define COMMAND_ON "ON";
-#define COMMAND_OFF "OFF";
-#define COMMAND_DELIMETER "=";
+#define COMMAND_ON "ON"
+#define COMMAND_OFF "OFF"
+const String STATE_DELIMETER = "=";
+const String LOCATION_DELIMETER = ".";
 
 #endif
