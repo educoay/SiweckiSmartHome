@@ -10,11 +10,11 @@
 #include "Arduino.h"
 #include "Point.h"
 #include "Room.h"
-#include "Command.h"
+#include "RemotlyControlled.h"
 
 #define REALESTATE_MAX_POINTS 20
 
-class RealEstate: public Command {
+class RealEstate: public RemotlyControlled {
   private:
     int rooms;
     
@@ -28,9 +28,9 @@ class RealEstate: public Command {
     void addRoom(Room* point);
     virtual void verifyControlPoints();
     virtual void initialize();
-    virtual String getObjectName();    
-    virtual String createCommand(int state);
+    virtual String getRemoteName();    
     virtual String createCommand();
+    virtual void executeCommand(String estateCommand);
 };
 
 #endif

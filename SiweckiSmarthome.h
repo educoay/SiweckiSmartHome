@@ -7,7 +7,5 @@
 
 #define COMMAND_ON "ON"
 #define COMMAND_OFF "OFF"
-const String STATE_DELIMETER = "=";
-const String LOCATION_DELIMETER = ".";
 
 #endif

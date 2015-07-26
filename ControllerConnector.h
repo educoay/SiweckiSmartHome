@@ -15,6 +15,8 @@ class ControllerConnector {
     int mqttServerPort = 1883;
     byte mac[];
     byte ip[]; 
+    char* queueController = "/SiweckiSmartHome/ToController";
+    char* queueActor = "/SiweckiSmartHome/ToActor";
     EthernetClient ethClient; 
     PubSubClient *mqttClient;
 
@@ -26,6 +28,7 @@ class ControllerConnector {
     //void callback(char* topic, byte* payload, unsigned int length);
     void sendCommand(String command);
     void initialize();
+    boolean checkOutstandingMessages();
 };
 
 #endif

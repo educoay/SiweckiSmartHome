@@ -24,7 +24,7 @@ boolean LightPoint::isControlButtonPressed() {
   if (buttonNow != this->buttonPreviousState) {
     this->buttonPreviousState = buttonNow;
     if(buttonNow == HIGH) {
-        Serial.println("--> " + getObjectName() + "Button pressed event <--");
+        Serial.println("--> " + getRemoteName() + "Button pressed event <--");
         return true;
     };
   };
@@ -48,11 +48,12 @@ void LightPoint::setLightPointOff() {
 void LightPoint::setLightPointState(int state) {
     digitalWrite(this->controlOutputPin, state);
     this->lightPointState = state;
+    sendStateUpdate();
 }
 
 void LightPoint::verifyControlPoint() {
   if (isControlButtonPressed()) {
-    Serial.println(getObjectName() + " control button pressed");
+    Serial.println(getRemoteName() + " control button pressed");
     if (isLightPointOn()) {
       setLightPointOff();
     } else {
@@ -61,12 +62,16 @@ void LightPoint::verifyControlPoint() {
   }
 }
 
-String LightPoint::getObjectName() {
-  return commandParent->getObjectName() + LOCATION_DELIMETER + this->name;
+String LightPoint::getRemoteName() {
+  if (parent != NULL) {
+    return parent->getRemoteName() + LOCATION_DELIMETER + this->name;
+  } else {
+    return "";
+  }
 }
 
 String LightPoint::createCommand(int state) {
-	String command = getObjectName() + STATE_DELIMETER;
+	String command = getRemoteName() + STATE_DELIMETER;
 	if (state == LOW) {
 		return command + COMMAND_OFF;
 	} else {
@@ -76,4 +81,14 @@ String LightPoint::createCommand(int state) {
 
 String LightPoint::createCommand() {
   return createCommand(this->lightPointState);
+}
+
+void LightPoint::executeCommand(String action) {
+  if (action == COMMAND_ON) {
+      setLightPointOn();
+  } else if (action == COMMAND_OFF) {
+      setLightPointOff();
+  } else {
+    Serial.println("Unknown action '" + action + "' for point " + getRemoteName());
+  }
 }

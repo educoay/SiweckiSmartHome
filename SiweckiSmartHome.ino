@@ -18,6 +18,7 @@ const int CEILING_OUTPUT_PIN = 7;
 const int AFTER_CHANGE_DELAY = 1;
 
 RealEstate realEstate = RealEstate(REALESTATE_NAME);
+ControllerConnector controllerConnector = ControllerConnector();
  
 void setup() {
   Serial.begin(9600);
@@ -29,57 +30,16 @@ void setup() {
   livingRoom->addPoint(ceiling);
   livingRoom->addPoint(corridor);
   realEstate.initialize();
+  controllerConnector.initialize();
 }
  
 void loop() {
   realEstate.verifyControlPoints();
+  controllerConnector.checkOutstandingMessages();
   delay(AFTER_CHANGE_DELAY);
 }
 
- /*
 
- 
-void sendMqttState(String state) {
-  Serial.print("STATE: ");
-  Serial.print(state);
-
-  boolean connected = mqttClient.connected();
-  if (!connected) {
-     initializeMqtt();
-  }
-  char ssid[state.length() + 1];        
-  state.toCharArray(ssid, state.length() + 1);
-  boolean publishState = mqttClient.publish(QUEUE_SERVER, ssid); 
-  Serial.print(" published: ");
-  Serial.println(publishState);
-}
-
-void checkMqtt()
-{
-  mqttClient.loop();
-}
-
-*/
-
- /*
-void executeRemoteCommand(String command) {
-  Serial.println(command);
-
-  // Read each command pair 
-  int locationDelimeterIndex = command.indexOf(LOCATION_DELIMETER);
-  int stateDelimeterIndex = command.indexOf(STATE_DELIMETER);
-  String location = command.substring(locationDelimeterIndex);
-  String actor = command.substring(locationDelimeterIndex + 1, stateDelimeterIndex);
-  String state = command.substring(stateDelimeterIndex + 1, command.length());
-  Serial.println(location + ":" + actor + ":" + state);
-
-  if (state == COMMAND_ON) {
-      livingRoom.setLightPointOn();
-  } else if (state == COMMAND_OFF) {
-      livingRoom.setLightPointOff();
-  }
-}
-*/
  
 
  

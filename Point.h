@@ -7,10 +7,10 @@
 #ifndef Point_h
 #define Point_h
 
-#include "Command.h"
+#include "RemotlyControlled.h"
 #include "ControllerConnector.h"
 
-class Point: public Command {
+class Point: public RemotlyControlled {
   protected:
     String name;
     ControllerConnector controllerConnector;
@@ -18,6 +18,7 @@ class Point: public Command {
   public:
     Point(String name) { this->name = name;};
     ~Point(){};
+    String getName() {return name;};
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;
     virtual void verifyControlPoint() = 0;

@@ -17,6 +17,7 @@ class LightPoint: public Point {
 		int controlOutputPin;
     int buttonPreviousState;
     void setLightPointState(int state);
+    String createCommand(int state);
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
@@ -26,8 +27,8 @@ class LightPoint: public Point {
     void setLightPointOn();
     boolean isLightPointOn();
     void setLightPointOff();
-    virtual String getObjectName();
-		virtual String createCommand(int state);
+    virtual String getRemoteName();
+    virtual void executeCommand(String command);
     virtual String createCommand();
     virtual void verifyControlPoint();
 };

@@ -32,15 +32,33 @@ void RealEstate::verifyControlPoints() {
   }
 }
 
-String RealEstate::getObjectName() {
+String RealEstate::getRemoteName() {
   return this->name;
 }
 
-String RealEstate::createCommand(int state) {
-  
-}
 
 String RealEstate::createCommand() {
+  return getRemoteName();
+}
+
+void RealEstate::executeCommand(String estateCommand) {
+  String estateRemoteName = getNextRemotlyControlled(estateCommand);
+  String roomCommand = getSubCommand(estateCommand);
+  String roomRemoteName = getNextRemotlyControlled(roomCommand);
+  bool find = false;
   
+  if (estateRemoteName != this->name) {
+    Serial.println("Unknown estate name '" + estateRemoteName + ". Ignored");
+  }
+  
+  for(int i = 0; i < REALESTATE_MAX_POINTS && !find; i++) {
+    if (roomsTable[i]->getName() == roomRemoteName) {
+      roomsTable[i]->executeCommand(getSubCommand(roomCommand));
+      find = true;
+    }
+  }
+  if (!find) {
+    Serial.println("There is no room in estate from command " + estateCommand);
+  }
 }
 

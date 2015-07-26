@@ -1,9 +1,8 @@
 
-
 #include "ControllerConnector.h"
+#include "RealEstate.h"
 
-char* QUEUE_CONTROLLER = "/SiweckiSmartHome/ToController";
-char* QUEUE_ACTOR = "/SiweckiSmartHome/ToActor";
+extern RealEstate realEstate;
 
 ControllerConnector::ControllerConnector() {
   this->mqttClient = NULL;
@@ -29,13 +28,11 @@ ControllerConnector::~ControllerConnector() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  /*
   payload[length] = '\0';
   char* strPayload = (char*)payload;
   Serial.print("IN: ");
   Serial.println(strPayload);
-  executeRemoteCommand(strPayload);  
-  */
+  realEstate.executeCommand(strPayload);
 }
 
 void ControllerConnector::initialize() {
@@ -52,13 +49,26 @@ void ControllerConnector::initializeMqtt()
   mqttClient = new PubSubClient(mqttServerIP, mqttServerPort, callback, ethClient);
   
   if (mqttClient->connect("arduinoClient", "anonymous", "haslo")) {
-    mqttClient->subscribe(QUEUE_ACTOR);
+    mqttClient->subscribe(queueActor);
     Serial.println("MQTT connect OK");
   } else {
     Serial.println("MQTT connect failed");
   }
 }
 
+boolean ControllerConnector::checkOutstandingMessages() {
+  return mqttClient->loop();
+}
+
 void ControllerConnector::sendCommand(String command) {
-      
+  Serial.println("Command to send to Controller: " + command);
+
+  boolean connected = mqttClient->connected();
+  if (!connected) {
+     initializeMqtt();
+  }
+  char ssid[command.length() + 1];        
+  command.toCharArray(ssid, command.length() + 1);
+  boolean publishState = mqttClient->publish(queueController, ssid); 
+  Serial.println("Published with result " + publishState);    
 }
