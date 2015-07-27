@@ -13,6 +13,7 @@ RealEstate::~RealEstate() {
     delete roomsTable[i];
     roomsTable[i] = NULL;
   } 
+  rooms = 0;
 }
 
 void RealEstate::addRoom(Room* room) {
@@ -52,7 +53,7 @@ void RealEstate::executeCommand(String estateCommand) {
     Serial.println("Unknown estate name '" + estateRemoteName + ". Ignored");
   }
   
-  for(int i = 0; i < REALESTATE_MAX_POINTS && !find; i++) {
+  for(int i = 0; i < rooms && !find; i++) {
     if (roomsTable[i]->getName() == roomRemoteName) {
       roomsTable[i]->executeCommand(getSubCommand(roomCommand));
       find = true;
