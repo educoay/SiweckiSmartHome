@@ -11,6 +11,7 @@ RealEstate::RealEstate(String name) {
 RealEstate::~RealEstate() {
   for(int i = 0; i < REALESTATE_MAX_POINTS; i++){
     delete roomsTable[i];
+    roomsTable[i] = NULL;
   } 
 }
 
