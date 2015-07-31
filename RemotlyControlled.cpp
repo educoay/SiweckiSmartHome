@@ -1,5 +1,13 @@
 #include "RemotlyControlled.h"
 
+String RemotlyControlled::getRemoteName() {
+  if (parent != NULL) {
+    return parent->getRemoteName() + LOCATION_DELIMETER + this->name;  
+  } else {
+    return this->name;
+  }
+}
+
 String RemotlyControlled::getNextRemotlyControlled(String command) {
   int locationDelimeterIndex = command.indexOf(LOCATION_DELIMETER);
   int stateDelimeterIndex = 0;

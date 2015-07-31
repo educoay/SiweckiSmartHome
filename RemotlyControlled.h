@@ -14,12 +14,14 @@ class RemotlyControlled {
     ControllerConnector *controllerConnector = NULL;
     
   public:
+    RemotlyControlled(String _name) { this->name = _name;};
     String getNextRemotlyControlled(String command);
     String getSubCommand(String command);
+    void setParent(RemotlyControlled *_parent) {this->parent = _parent;} ;
+    void setControllerConnector(ControllerConnector *_controllerConnector) {this->controllerConnector = _controllerConnector;};
+    String getRemoteName();
     virtual String createCommand() = 0;
     virtual void executeCommand(String command) = 0;
-    virtual void setParent(RemotlyControlled *_parent) {this->parent = _parent;} ;
-    virtual String getRemoteName(){ return name;};
     virtual String sendStateUpdate();
  };
 

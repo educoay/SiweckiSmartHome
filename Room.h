@@ -17,17 +17,14 @@ class Room: public RemotlyControlled {
     int points;
     
   protected:
-    String name;
     Point *pointsTable[ROOM_MAX_POINTS];
  
   public:
     Room(String name);
     ~Room();
     void addPoint(Point* point);
-    String getName () {return name;};
     virtual void initialize();
     virtual void verifyControlPoints();
-    virtual String getRemoteName();
     virtual String createCommand();
     virtual void executeCommand(String command);
 };

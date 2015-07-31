@@ -6,6 +6,11 @@ LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name):
 	initialize();
 }
 
+LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector):Point(name) {
+  LightPoint(controlButtonPin, controlOutputPin, name);
+  this->setControllerConnector(controllerConnector);
+}
+
 LightPoint::~LightPoint() {
 }
 
@@ -17,14 +22,11 @@ void LightPoint::initialize() {
 }
 
 boolean LightPoint::isControlButtonPressed() {
-  int buttonNow =  digitalRead(this->controlButtonPin);
-  //Serial.print("buttonNow: ");
-  //Serial.println(buttonNow);
-  
+  int buttonNow =  digitalRead(this->controlButtonPin);  
   if (buttonNow != this->buttonPreviousState) {
     this->buttonPreviousState = buttonNow;
     if(buttonNow == HIGH) {
-        Serial.println("--> " + getRemoteName() + "Button pressed event <--");
+        Serial.println("--> " + this->getRemoteName() + " Button pressed event <--");
         return true;
     };
   };
@@ -48,25 +50,17 @@ void LightPoint::setLightPointOff() {
 void LightPoint::setLightPointState(int state) {
     digitalWrite(this->controlOutputPin, state);
     this->lightPointState = state;
-    sendStateUpdate();
+    //sendStateUpdate();
 }
 
 void LightPoint::verifyControlPoint() {
   if (isControlButtonPressed()) {
-    Serial.println(getRemoteName() + " control button pressed");
+    Serial.println(this->getRemoteName() + " control button pressed.");
     if (isLightPointOn()) {
       setLightPointOff();
     } else {
       setLightPointOn();
     }
-  }
-}
-
-String LightPoint::getRemoteName() {
-  if (parent != NULL) {
-    return parent->getRemoteName() + LOCATION_DELIMETER + this->name;
-  } else {
-    return "";
   }
 }
 

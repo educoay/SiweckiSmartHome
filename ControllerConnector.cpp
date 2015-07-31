@@ -6,21 +6,6 @@ extern RealEstate realEstate;
 
 ControllerConnector::ControllerConnector() {
   this->mqttClient = NULL;
-  mqttServerIP[0] = 192;
-  mqttServerIP[1] = 168;
-  mqttServerIP[2] = 1;
-  mqttServerIP[3] = 190;
-  mqttServerPort = 1883;
-  mac[0]    = 0x00;
-  mac[1]    = 0x12;
-  mac[2]    = 0xFB;
-  mac[3]    = 0x95;
-  mac[4]    = 0x59;
-  mac[5]    = 0xCF;
-  ip[0]     = 192; 
-  ip[1]     = 168; 
-  ip[2]     = 1; 
-  ip[3]     = 191; 
 }
 
 ControllerConnector::~ControllerConnector() {
@@ -32,12 +17,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
   char* strPayload = (char*)payload;
   Serial.print("IN: ");
   Serial.println(strPayload);
-  realEstate.executeCommand(strPayload);
+  //realEstate.executeCommand(strPayload);
 }
 
 void ControllerConnector::initialize() {
+  Serial.println("ControllerConnector initialization... ");
+  Serial.println("Init Ehternet...");
   Ethernet.begin(this->mac, this->ip);
-  initializeMqtt();
+  Serial.println("Init MQTT...");
+  //initializeMqtt();
+  Serial.println("ControllerConnector initialization done.");
 }
 
  
@@ -45,15 +34,20 @@ void ControllerConnector::initializeMqtt()
 {
   if (mqttClient != NULL ){
     delete mqttClient;
+    mqttClient = NULL;
   }
-  mqttClient = new PubSubClient(mqttServerIP, mqttServerPort, callback, ethClient);
   
+  mqttClient = new PubSubClient(mqttServerIP, mqttServerPort, callback, ethClient);
+
+  mqttClient->connect("arduinoClient", "anonymous", "haslo");
+  /*
   if (mqttClient->connect("arduinoClient", "anonymous", "haslo")) {
     mqttClient->subscribe(queueActor);
     Serial.println("MQTT connect OK");
   } else {
     Serial.println("MQTT connect failed");
   }
+  */
 }
 
 boolean ControllerConnector::checkOutstandingMessages() {

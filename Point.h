@@ -12,13 +12,11 @@
 
 class Point: public RemotlyControlled {
   protected:
-    String name;
     ControllerConnector controllerConnector;
  
   public:
-    Point(String name) { this->name = name;};
+    Point(String name):RemotlyControlled(name){};
     ~Point(){};
-    String getName() {return name;};
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;
     virtual void verifyControlPoint() = 0;

@@ -15,27 +15,33 @@ const String CEILING_NAME = "Ceiling";
 const int CEILING_BUTTON_PIN = 6;
 const int CEILING_OUTPUT_PIN = 7;
 
-const int AFTER_CHANGE_DELAY = 1;
+const int AFTER_CHANGE_DELAY = 100;
 
 RealEstate realEstate = RealEstate(REALESTATE_NAME);
 ControllerConnector controllerConnector = ControllerConnector();
  
 void setup() {
   Serial.begin(9600);
-  Room *livingRoom = new Room(LIVINGROOM_NAME);  
-  LightPoint *ceiling = new LightPoint(CEILING_BUTTON_PIN, CEILING_OUTPUT_PIN, CEILING_NAME);
-  LightPoint *corridor = new LightPoint(CORRIDOR_BUTTON_PIN, CORRIDOR_OUTPUT_PIN, CORRIDOR_NAME);
-
+  Serial.println("Initialization begin...");
+  Room *livingRoom = new Room(LIVINGROOM_NAME);
+  LightPoint *ceiling = new LightPoint(CEILING_BUTTON_PIN, CEILING_OUTPUT_PIN, CEILING_NAME); //, &controllerConnector);
+  LightPoint *corridor = new LightPoint(CORRIDOR_BUTTON_PIN, CORRIDOR_OUTPUT_PIN, CORRIDOR_NAME); //, &controllerConnector);
+  Serial.println("Data structure created.");
   realEstate.addRoom(livingRoom);
   livingRoom->addPoint(ceiling);
+  Serial.println("ceiling: " + ceiling->getRemoteName());
   livingRoom->addPoint(corridor);
+  Serial.println("corridor: " + corridor->getRemoteName());
+  Serial.println("Data structure assigned.");
   realEstate.initialize();
   controllerConnector.initialize();
+  Serial.println("Initialization done.");
 }
  
 void loop() {
+  //Serial.println("Loop...");
   realEstate.verifyControlPoints();
-  controllerConnector.checkOutstandingMessages();
+  //controllerConnector.checkOutstandingMessages();
   delay(AFTER_CHANGE_DELAY);
 }
 

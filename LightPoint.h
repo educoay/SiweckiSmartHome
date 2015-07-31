@@ -21,13 +21,13 @@ class LightPoint: public Point {
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
+    LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector);
     ~LightPoint();
 		virtual void initialize();
 		boolean isControlButtonPressed();
     void setLightPointOn();
     boolean isLightPointOn();
     void setLightPointOff();
-    virtual String getRemoteName();
     virtual void executeCommand(String command);
     virtual String createCommand();
     virtual void verifyControlPoint();

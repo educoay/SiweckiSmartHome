@@ -19,7 +19,6 @@ class RealEstate: public RemotlyControlled {
     int rooms;
     
   protected:
-    String name;
     Room *roomsTable[REALESTATE_MAX_POINTS];
  
   public:
@@ -27,8 +26,7 @@ class RealEstate: public RemotlyControlled {
     ~RealEstate();
     void addRoom(Room* point);
     virtual void verifyControlPoints();
-    virtual void initialize();
-    virtual String getRemoteName();    
+    virtual void initialize();   
     virtual String createCommand();
     virtual void executeCommand(String estateCommand);
 };
