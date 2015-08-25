@@ -1,7 +1,6 @@
 #include "RealEstate.h"
 
 RealEstate::RealEstate(String name):RemotlyControlled(name) {
-  //this->name = name;
   rooms = 0;
   for(int i = 0; i < REALESTATE_MAX_POINTS; i++){
     roomsTable[i] = NULL;
@@ -23,13 +22,10 @@ void RealEstate::addRoom(Room* room) {
 }
 
 void RealEstate::initialize() {
-  Serial.println("RealEstate initialization... ");
+  Serial.println("RealEstate init... ");
   for(int i = 0; i < rooms; i++){
-    Serial.print("Init Room ");
-    Serial.println(i);
     roomsTable[i]->initialize();
-  }
-  Serial.println("RealEstate initialization done.");
+  };
 }
 
 void RealEstate::verifyControlPoints() {
@@ -44,18 +40,21 @@ String RealEstate::createCommand() {
 }
 
 void RealEstate::executeCommand(String estateCommand) {
-  Serial.println("Cmd: " + estateCommand);
-  /*
   String estateRemoteName = getNextRemotlyControlled(estateCommand);
   String roomCommand = getSubCommand(estateCommand);
   String roomRemoteName = getNextRemotlyControlled(roomCommand);
   bool find = false;
+
+  Serial.println("Estate: " + estateRemoteName);
+  Serial.println("Room: '" + roomRemoteName + "'");
+  Serial.println("Room command: " + roomCommand);
   
   if (estateRemoteName != this->name) {
     Serial.println("Unknown estate name '" + estateRemoteName + ". Ignored");
   }
   
   for(int i = 0; i < rooms && !find; i++) {
+    Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
     if (roomsTable[i]->getRemoteName() == roomRemoteName) {
       roomsTable[i]->executeCommand(getSubCommand(roomCommand));
       find = true;
@@ -64,6 +63,5 @@ void RealEstate::executeCommand(String estateCommand) {
   if (!find) {
     Serial.println("There is no room in estate from command " + estateCommand);
   }
-  */
 }
 

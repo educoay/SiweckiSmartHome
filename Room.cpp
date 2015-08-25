@@ -23,13 +23,9 @@ void Room::addPoint(Point* point) {
 }
 
 void Room::initialize() {
-  Serial.println("Init points...");
   for(int i = 0; i < points; i++) {
-    Serial.print("Init points ");
-    Serial.println(i);
     pointsTable[i]->initialize();
   }
-  Serial.println("Init points. Done. Room initialized.");
 }
 
 void Room::verifyControlPoints() {  
@@ -47,6 +43,10 @@ void Room::executeCommand(String roomCommand) {
   String pointRemoteName = getNextRemotlyControlled(roomCommand);
   String pointAction = getSubCommand(roomCommand);
   bool find = false;
+
+  Serial.println("Point name: " + pointRemoteName);
+  Serial.println("Point action: '" + pointAction + "'");
+  Serial.println("Room command: " + roomCommand);
  
   for(int i = 0; i < points && !find; i++) {
     if (pointsTable[i]->getRemoteName() == pointRemoteName) {

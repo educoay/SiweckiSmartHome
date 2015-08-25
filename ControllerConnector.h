@@ -11,13 +11,14 @@
 
 class ControllerConnector {
   private:
-    byte mqttServerIP[4] = {192, 168, 1, 190};
-    int mqttServerPort = 1883;
     byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
-    byte ip[4]  = {192, 168, 1, 191};
-    char* queueController = "/SiweckiSmartHome/ToController";
-    char* queueActor = "/SiweckiSmartHome/ToActor";
-    EthernetClient ethClient; 
+
+    char* queueController = "/SSH/ToController";
+    char* queueActor = "/SSH/ToActor";
+    char* clientName = "SSH-Actor01";
+    char* mqttServerUsername = "anonymous";
+    char* mqttServerPassword = "haslo";
+    EthernetClient ethClient;
     PubSubClient *mqttClient = NULL;
 
     void initializeMqtt();
@@ -25,6 +26,7 @@ class ControllerConnector {
   public:
     ControllerConnector();
     ~ControllerConnector();
+    void setMqttClient(PubSubClient *_mqttClient) {this->mqttClient = _mqttClient;};
     void sendCommand(String command);
     void initialize();
     boolean checkOutstandingMessages();

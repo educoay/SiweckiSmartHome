@@ -3,7 +3,6 @@
 LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name):Point(name) {
 	this->controlButtonPin = controlButtonPin;
 	this->controlOutputPin = controlOutputPin;
-	initialize();
 }
 
 LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector):Point(name) {
@@ -18,7 +17,6 @@ LightPoint::~LightPoint() {
 void LightPoint::initialize() {
     pinMode(this->controlButtonPin, INPUT);
     pinMode(this->controlOutputPin, OUTPUT);
-    setLightPointState(LOW);
 }
 
 boolean LightPoint::isControlButtonPressed() {
@@ -26,7 +24,7 @@ boolean LightPoint::isControlButtonPressed() {
   if (buttonNow != this->buttonPreviousState) {
     this->buttonPreviousState = buttonNow;
     if(buttonNow == HIGH) {
-        Serial.println("--> " + this->getRemoteName() + " Button pressed event <--");
+        Serial.println(this->getFullRemoteName() + " button pressed");
         return true;
     };
   };
@@ -39,23 +37,22 @@ boolean LightPoint::isLightPointOn() {
 
 void LightPoint::setLightPointOn() {
   setLightPointState(HIGH);
-  Serial.println("Light switch on.");
+  Serial.println("Light on.");
 }
 
 void LightPoint::setLightPointOff() {
   setLightPointState(LOW);
-    Serial.println("Light switched off.");
+  Serial.println("Light off.");
 }
  
 void LightPoint::setLightPointState(int state) {
     digitalWrite(this->controlOutputPin, state);
     this->lightPointState = state;
-    //sendStateUpdate();
+    sendStateUpdate();
 }
 
 void LightPoint::verifyControlPoint() {
   if (isControlButtonPressed()) {
-    Serial.println(this->getRemoteName() + " control button pressed.");
     if (isLightPointOn()) {
       setLightPointOff();
     } else {
@@ -65,7 +62,7 @@ void LightPoint::verifyControlPoint() {
 }
 
 String LightPoint::createCommand(int state) {
-	String command = getRemoteName() + STATE_DELIMETER;
+	String command = getFullRemoteName() + STATE_DELIMETER;
 	if (state == LOW) {
 		return command + COMMAND_OFF;
 	} else {
@@ -83,6 +80,6 @@ void LightPoint::executeCommand(String action) {
   } else if (action == COMMAND_OFF) {
       setLightPointOff();
   } else {
-    Serial.println("Unknown action '" + action + "' for point " + getRemoteName());
+    Serial.println("Unknown action '" + action + "' for point " + getFullRemoteName());
   }
 }
