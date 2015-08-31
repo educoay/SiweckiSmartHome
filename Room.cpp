@@ -44,16 +44,15 @@ void Room::executeCommand(String roomCommand) {
   String pointAction = getSubCommand(roomCommand);
   bool find = false;
 
-  Serial.println("Point name: " + pointRemoteName);
-  Serial.println("Point action: '" + pointAction + "'");
-  Serial.println("Room command: " + roomCommand);
- 
   for(int i = 0; i < points && !find; i++) {
+    //Serial.println("Point to check: '" + pointsTable[i]->getRemoteName() + "'");
     if (pointsTable[i]->getRemoteName() == pointRemoteName) {
       pointsTable[i]->executeCommand(pointAction);
       find = true;
     }
+    //Serial.println("Point checked.");
   }
+  //Serial.println("All points checked.");
   if (!find) {
     Serial.println("There is no point in rooms from command " + roomCommand);
   }

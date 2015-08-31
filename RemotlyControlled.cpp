@@ -42,9 +42,10 @@ String RemotlyControlled::getSubCommand(String command) {
   }   
 }
 
-String RemotlyControlled::sendStateUpdate() {
+void RemotlyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
     controllerConnector->sendCommand(createCommand());
+    Serial.println("Update sent.");
   } else {
     Serial.println("No connector, update skipped");
   }

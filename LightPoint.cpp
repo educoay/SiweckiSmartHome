@@ -37,18 +37,17 @@ boolean LightPoint::isLightPointOn() {
 
 void LightPoint::setLightPointOn() {
   setLightPointState(HIGH);
-  Serial.println("Light on.");
+  Serial.println(getFullRemoteName() + " on.");
 }
 
 void LightPoint::setLightPointOff() {
   setLightPointState(LOW);
-  Serial.println("Light off.");
+  Serial.println(getFullRemoteName() + " off.");
 }
  
 void LightPoint::setLightPointState(int state) {
     digitalWrite(this->controlOutputPin, state);
     this->lightPointState = state;
-    sendStateUpdate();
 }
 
 void LightPoint::verifyControlPoint() {
@@ -58,6 +57,7 @@ void LightPoint::verifyControlPoint() {
     } else {
       setLightPointOn();
     }
+    sendStateUpdate();
   }
 }
 
@@ -81,5 +81,6 @@ void LightPoint::executeCommand(String action) {
       setLightPointOff();
   } else {
     Serial.println("Unknown action '" + action + "' for point " + getFullRemoteName());
-  }
+  };
+  //Serial.println("Action " + action + " finished");
 }

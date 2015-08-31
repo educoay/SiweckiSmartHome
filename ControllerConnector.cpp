@@ -43,17 +43,21 @@ boolean ControllerConnector::checkOutstandingMessages() {
 void ControllerConnector::sendCommand(String command) {
   Serial.println("Command to send: " + command);
 
-  boolean connected = mqttClient->connected();
-  if (!connected) {
+  if (!mqttClient->connected()) {
      initializeMqtt();
   }
-  char ssid[command.length() + 1];        
-  command.toCharArray(ssid, command.length() + 1);
-  boolean publishState = mqttClient->publish(this->queueController, ssid); 
+
+
+  char message[command.length() + 1];        
+  command.toCharArray(message, command.length()+1);
   
-  if (publishState) {
-      Serial.println("Command " + command + " published."); 
+  if (mqttClient->publish(this->queueController, message)) {
+      Serial.print("Command "); 
+      Serial.print(message);
+      Serial.println(" published."); 
   } else {
-    Serial.println("Command " + command + " publish failed."); 
-  }   
+      Serial.print("Command "); 
+      Serial.print(message);
+      Serial.println(" publish failed."); 
+  } 
 }

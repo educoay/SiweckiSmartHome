@@ -44,22 +44,23 @@ void RealEstate::executeCommand(String estateCommand) {
   String roomCommand = getSubCommand(estateCommand);
   String roomRemoteName = getNextRemotlyControlled(roomCommand);
   bool find = false;
-
+/*
   Serial.println("Estate: " + estateRemoteName);
   Serial.println("Room: '" + roomRemoteName + "'");
   Serial.println("Room command: " + roomCommand);
-  
+  */
   if (estateRemoteName != this->name) {
-    Serial.println("Unknown estate name '" + estateRemoteName + ". Ignored");
+    Serial.println("Unknown estate name '" + estateRemoteName + "'. Ignored");
   }
   
   for(int i = 0; i < rooms && !find; i++) {
-    Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
+    //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
     if (roomsTable[i]->getRemoteName() == roomRemoteName) {
       roomsTable[i]->executeCommand(getSubCommand(roomCommand));
       find = true;
     }
   }
+  //Serial.println("Rooms checked.");
   if (!find) {
     Serial.println("There is no room in estate from command " + estateCommand);
   }

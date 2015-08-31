@@ -21,9 +21,9 @@ class RemotlyControlled {
     void setControllerConnector(ControllerConnector *_controllerConnector) {this->controllerConnector = _controllerConnector;};
     String getFullRemoteName();
     String getRemoteName();
+    void sendStateUpdate();
     virtual String createCommand() = 0;
     virtual void executeCommand(String command) = 0;
-    virtual String sendStateUpdate();
  };
 
  #endif
