@@ -38,23 +38,22 @@ String Room::createCommand() {
   return getRemoteName();
 }
 
+String Room::createQueue() {
+  return getRemoteName();
+}
 
 void Room::executeCommand(String queue, String command) {
-  String pointRemoteName = getNextRemotlyControlled(roomCommand);
-  //String pointAction = getSubCommand(roomCommand);
+  String pointRemoteName = getNextRemotlyControlled(queue);
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {
-    //Serial.println("Point to check: '" + pointsTable[i]->getRemoteName() + "'");
     if (pointsTable[i]->getRemoteName() == pointRemoteName) {
-      pointsTable[i]->executeCommand(command);
+      pointsTable[i]->executeCommand(queue, command);
       find = true;
     }
-    //Serial.println("Point checked.");
   }
-  //Serial.println("All points checked.");
   if (!find) {
-    Serial.println("There is no point in rooms from command " + roomCommand);
+    Serial.println("There is no point '" + pointRemoteName  + "' in room '" + getRemoteName() + "' from command " + queue);
   }
 }
 

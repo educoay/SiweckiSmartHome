@@ -8,11 +8,8 @@
 #define Point_h
 
 #include "RemotlyControlled.h"
-#include "ControllerConnector.h"
 
 class Point: public RemotlyControlled {
-  protected:
-    ControllerConnector controllerConnector;
  
   public:
     Point(String name):RemotlyControlled(name){};

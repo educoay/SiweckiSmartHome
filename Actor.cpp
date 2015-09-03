@@ -1,13 +1,13 @@
-#include "RealEstate.h"
+#include "Actor.h"
 
-RealEstate::RealEstate(String name):RemotlyControlled(name) {
+Actor::Actor(String name):RemotlyControlled(name) {
   rooms = 0;
-  for(int i = 0; i < REALESTATE_MAX_POINTS; i++){
+  for(int i = 0; i < ACTOR_MAX_ROOMS; i++){
     roomsTable[i] = NULL;
   } 
 }
 
-RealEstate::~RealEstate() {
+Actor::~Actor() {
   for(int i = 0; i < rooms; i++){
     delete roomsTable[i];
     roomsTable[i] = NULL;
@@ -15,54 +15,71 @@ RealEstate::~RealEstate() {
   rooms = 0;
 }
 
-void RealEstate::addRoom(Room* room) {
+void Actor::addRoom(Room* room) {
   room->setParent(this);
   roomsTable[rooms] = room;
   rooms++;
 }
 
-void RealEstate::initialize() {
-  Serial.println("RealEstate init... ");
+void Actor::initialize() {
+  Serial.println("Actor init... ");
   for(int i = 0; i < rooms; i++){
     roomsTable[i]->initialize();
   };
 }
 
-void RealEstate::verifyControlPoints() {
+void Actor::verifyControlPoints() {
   for(int i = 0; i < rooms; i++){
     //Serial.println("Room: " + roomsTable[i]->getRemoteName());
     roomsTable[i]->verifyControlPoints();
   }
 }
 
-String RealEstate::createCommand() {
+
+String Actor::getFullRemoteName() {
+  if (parent != NULL) {
+    return parent->getFullRemoteName() + LOCATION_DELIMETER + this->name;  
+  } else {
+    return LOCATION_DELIMETER + this->name + LOCATION_DELIMETER + OUT_DIRECTION;
+  }
+}
+
+String Actor::createQueue() {
   return getRemoteName();
 }
 
-void RealEstate::executeCommand(String queue, String command) {
-  String estateRemoteName = getNextRemotlyControlled(queue);
-  String roomCommand = getSubCommand(queue);
-  String roomRemoteName = getNextRemotlyControlled(queue);
+String Actor::createCommand() {
+  return "";
+}
+
+void Actor::executeCommand(String queue, String command) {
+  String actorRemoteName = getNextRemotlyControlled(queue);
+  String subQueue = getSubRemotlyControlled(queue);
+  String direction = getNextRemotlyControlled(subQueue);
+  String roomSubQueue = getSubRemotlyControlled(subQueue);
+  String roomRemoteName = getNextRemotlyControlled(roomSubQueue);
   bool find = false;
 /*
-  Serial.println("Estate: " + estateRemoteName);
+  Serial.println("Actor: " + actorRemoteName);
+  Serial.println("SubQueue: " + subQueue);
+  Serial.println("Direction: " + direction);  
   Serial.println("Room: '" + roomRemoteName + "'");
-  Serial.println("Room command: " + roomCommand);
-  */
-  if (estateRemoteName != this->name) {
-    Serial.println("Unknown estate name '" + estateRemoteName + "'. Ignored");
+  Serial.println("Room SubQueue: " + roomSubQueue);
+*/
+  if (actorRemoteName != this->name) {
+    Serial.println("Unknown actor name '" + actorRemoteName + "'. Ignored");
   }
   
   for(int i = 0; i < rooms && !find; i++) {
     //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
     if (roomsTable[i]->getRemoteName() == roomRemoteName) {
-      roomsTable[i]->executeCommand(getSubCommand(roomCommand));
+      roomsTable[i]->executeCommand(getSubRemotlyControlled(roomSubQueue), command);
       find = true;
     }
   }
   //Serial.println("Rooms checked.");
   if (!find) {
-    Serial.println("There is no room in estate from command " + estateCommand);
+    Serial.println("There is no room in actor from command " + queue + " " + command);
   }
 }
 

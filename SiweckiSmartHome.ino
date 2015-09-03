@@ -2,11 +2,11 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 
-#include "RealEstate.h"
+#include "Actor.h"
 #include "Room.h"
 #include "LightPoint.h"
 
-const String REALESTATE_NAME = "SSH";
+const String ACTOR_NAME = "Ard1";
 const String LIVINGROOM_NAME = "LivingRoom";
 const String CORRIDOR_NAME = "Corridor";
 const int CORRIDOR_BUTTON_PIN = 2;
@@ -22,7 +22,7 @@ int mqttServerPort = 1883;
 
 const int AFTER_CHANGE_DELAY = 100;
 
-RealEstate realEstate = RealEstate(REALESTATE_NAME);
+Actor actor = Actor(ACTOR_NAME);
 ControllerConnector controllerConnector = ControllerConnector();
 
 EthernetClient ethClient;
@@ -34,12 +34,12 @@ int i = 0;
 
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
-  char* commmand = (char*)payload;
+  char* command = (char*)payload;
   Serial.print("Queue: ");
   Serial.println(topic);
   Serial.print("Message received: ");
   Serial.println(command);
-  realEstate.executeCommand(queue, command);
+  actor.executeCommand(topic, command);
   Serial.println("Callback finished.");
 }
  
@@ -48,7 +48,7 @@ void setup() {
   Serial.println("Setup begin...");
   Ethernet.begin(mac);
   controllerConnector.setMqttClient(&mqttClient);
-  controllerConnector.initialize();
+  controllerConnector.initialize(ACTOR_NAME);
   Room *livingRoom = new Room(LIVINGROOM_NAME);
   ceiling = new LightPoint(CEILING_BUTTON_PIN, CEILING_OUTPUT_PIN, CEILING_NAME);
   corridor = new LightPoint(CORRIDOR_BUTTON_PIN, CORRIDOR_OUTPUT_PIN, CORRIDOR_NAME);
@@ -56,19 +56,19 @@ void setup() {
   ceiling->setControllerConnector(&controllerConnector);
   corridor->setControllerConnector(&controllerConnector);
   //Serial.println("Data structure created.");
-  realEstate.addRoom(livingRoom);
+  actor.addRoom(livingRoom);
   //Serial.println("Room addded.");
   livingRoom->addPoint(ceiling);
   livingRoom->addPoint(corridor);
   Serial.println("ceiling: " + ceiling->getFullRemoteName());
   Serial.println("corridor: " + corridor->getFullRemoteName());
-  realEstate.initialize();
+  actor.initialize();
   Serial.println("Init done.");
 }
  
 void loop() {
   //Serial.print("Loop... "); Serial.println(i++);
-  realEstate.verifyControlPoints();
+  actor.verifyControlPoints();
   mqttClient.loop();
   delay(AFTER_CHANGE_DELAY);
 }

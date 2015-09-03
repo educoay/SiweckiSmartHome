@@ -28,8 +28,9 @@ class LightPoint: public Point {
     void setLightPointOn();
     boolean isLightPointOn();
     void setLightPointOff();
-    virtual void executeCommand(String command);
+    virtual void executeCommand(String queue, String command);
     virtual String createCommand();
+    virtual String createQueue();
     virtual void verifyControlPoint();
 };
 
