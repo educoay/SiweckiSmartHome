@@ -14,7 +14,7 @@ class ControllerConnector {
     byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
 
     char* queueController = "/SSH/ToController";
-    char* queueActor = "/SSH/ToActor";
+    char* listenQueueRange = "/SSH/#";
     char* clientName = "SSH-Actor01";
     char* mqttServerUsername = "anonymous";
     char* mqttServerPassword = "haslo";

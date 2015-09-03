@@ -5,7 +5,7 @@
 #include "ControllerConnector.h"
 
 const char STATE_DELIMETER = '#';
-const char LOCATION_DELIMETER = '.';
+const char LOCATION_DELIMETER = '/';
 
 class RemotlyControlled {
   protected:

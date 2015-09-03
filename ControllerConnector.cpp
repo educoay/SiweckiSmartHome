@@ -26,7 +26,7 @@ void ControllerConnector::initializeMqtt()
   Serial.println("Init MQTT...");
   if (this->mqttClient != NULL) {
     if (mqttClient->connect(this->clientName, this->mqttServerUsername, this->mqttServerPassword)) {
-      mqttClient->subscribe(this->queueActor);
+      mqttClient->subscribe(this->listenQueueRange);
       Serial.println("MQTT connect OK");
     } else {
       Serial.println("MQTT connect failed");

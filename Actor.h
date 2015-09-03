@@ -28,7 +28,7 @@ class RealEstate: public RemotlyControlled {
     virtual void verifyControlPoints();
     virtual void initialize();   
     virtual String createCommand();
-    virtual void executeCommand(String estateCommand);
+    virtual void executeCommand(String queue, String command);
 };
 
 #endif

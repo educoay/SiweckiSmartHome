@@ -34,10 +34,12 @@ int i = 0;
 
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
-  char* strPayload = (char*)payload;
+  char* commmand = (char*)payload;
+  Serial.print("Queue: ");
+  Serial.println(topic);
   Serial.print("Message received: ");
-  Serial.println(strPayload);
-  realEstate.executeCommand(strPayload);
+  Serial.println(command);
+  realEstate.executeCommand(queue, command);
   Serial.println("Callback finished.");
 }
  

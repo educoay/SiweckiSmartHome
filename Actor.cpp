@@ -39,10 +39,10 @@ String RealEstate::createCommand() {
   return getRemoteName();
 }
 
-void RealEstate::executeCommand(String estateCommand) {
-  String estateRemoteName = getNextRemotlyControlled(estateCommand);
-  String roomCommand = getSubCommand(estateCommand);
-  String roomRemoteName = getNextRemotlyControlled(roomCommand);
+void RealEstate::executeCommand(String queue, String command) {
+  String estateRemoteName = getNextRemotlyControlled(queue);
+  String roomCommand = getSubCommand(queue);
+  String roomRemoteName = getNextRemotlyControlled(queue);
   bool find = false;
 /*
   Serial.println("Estate: " + estateRemoteName);
