@@ -1,4 +1,4 @@
-#include "room.h"
+#include "Room.h"
 
 Room::Room(String name):RemotlyControlled(name) {
   //this->name = name;
