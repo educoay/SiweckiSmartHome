@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(String name):RemotlyControlled(name) {
+Room::Room(String name):ObjectRemotlyControlled(name) {
   //this->name = name;
   points = 0;
   for(int i = 0; i < ROOM_MAX_POINTS; i++){

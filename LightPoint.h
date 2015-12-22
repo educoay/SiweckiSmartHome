@@ -17,7 +17,6 @@ class LightPoint: public Point {
 		int controlOutputPin;
     int buttonPreviousState;
     void setLightPointState(int state);
-    String createCommand(int state);
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
@@ -30,6 +29,7 @@ class LightPoint: public Point {
     void setLightPointOff();
     virtual void executeCommand(String queue, String command);
     virtual String createCommand();
+    virtual String createCommand(int state);
     virtual String createQueue();
     virtual void verifyControlPoint();
 };

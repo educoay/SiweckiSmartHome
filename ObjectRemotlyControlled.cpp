@@ -1,6 +1,6 @@
-#include "RemotlyControlled.h"
+#include "ObjectRemotlyControlled.h"
 
-String RemotlyControlled::getFullRemoteName() {
+String ObjectRemotlyControlled::getFullRemoteName() {
   if (parent != NULL) {
     return parent->getFullRemoteName() + LOCATION_DELIMETER + this->name;  
   } else {
@@ -8,11 +8,11 @@ String RemotlyControlled::getFullRemoteName() {
   }
 }
 
-String RemotlyControlled::getRemoteName() {
+String ObjectRemotlyControlled::getRemoteName() {
   return this->name;
 }
 
-String RemotlyControlled::getNextRemotlyControlled(String queue) {
+String ObjectRemotlyControlled::getNextRemotlyControlled(String queue) {
   int locationDelimeterIndex = queue.substring(1).indexOf(LOCATION_DELIMETER);
   if (locationDelimeterIndex >= 0) {
     return queue.substring(1,locationDelimeterIndex + 1);
@@ -21,7 +21,7 @@ String RemotlyControlled::getNextRemotlyControlled(String queue) {
   } 
 }
 
-String RemotlyControlled::getSubRemotlyControlled(String queue) {
+String ObjectRemotlyControlled::getSubRemotlyControlled(String queue) {
   int locationDelimeterIndex = queue.substring(1).indexOf(LOCATION_DELIMETER);
   if (locationDelimeterIndex > 0) {
     return queue.substring(locationDelimeterIndex + 1);
@@ -30,7 +30,7 @@ String RemotlyControlled::getSubRemotlyControlled(String queue) {
   }   
 }
 
-void RemotlyControlled::sendStateUpdate() {
+void ObjectRemotlyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
     controllerConnector->sendCommand(createQueue(), createCommand());
     Serial.println("Update sent.");

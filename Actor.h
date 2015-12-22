@@ -8,13 +8,14 @@
 #define Actor_h
 
 #include "Arduino.h"
+
+#include "ObjectRemotlyControlled.h"
 #include "Point.h"
 #include "Room.h"
-#include "RemotlyControlled.h"
 
 #define ACTOR_MAX_ROOMS 20
 
-class Actor: public RemotlyControlled {
+class Actor: public ObjectRemotlyControlled {
   private:
     int rooms;
     
