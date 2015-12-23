@@ -29,7 +29,7 @@ class Actor: public ObjectRemotlyControlled {
     virtual void verifyControlPoints();
     virtual void initialize();   
     virtual String createCommand();
-    virtual String createQueue();
+    virtual String createCommand(int state);
     virtual void executeCommand(String queue, String command);
     virtual String getFullRemoteName();
 };

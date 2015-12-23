@@ -38,7 +38,7 @@ String Room::createCommand() {
   return getRemoteName();
 }
 
-String Room::createQueue() {
+String Room::createCommand(int state) {
   return getRemoteName();
 }
 

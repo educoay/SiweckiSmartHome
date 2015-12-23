@@ -49,7 +49,7 @@ class ObjectRemotlyControlled {
      * be provided.
      */
     virtual String createCommand(int state) = 0;
-    virtual String createQueue() = 0;
+
     virtual void executeCommand(String queue, String command) = 0;
  };
 

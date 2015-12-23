@@ -13,7 +13,7 @@ class Point: public ObjectRemotlyControlled {
  
   public:
     Point(String name):ObjectRemotlyControlled(name){};
-    ~Point(){};
+    virtual ~Point(){};
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;
     virtual void verifyControlPoint() = 0;

@@ -21,7 +21,7 @@ class LightPoint: public Point {
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
     LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector);
-    ~LightPoint();
+    virtual ~LightPoint();
 		virtual void initialize();
 		boolean isControlButtonPressed();
     void setLightPointOn();
@@ -30,7 +30,6 @@ class LightPoint: public Point {
     virtual void executeCommand(String queue, String command);
     virtual String createCommand();
     virtual String createCommand(int state);
-    virtual String createQueue();
     virtual void verifyControlPoint();
 };
 

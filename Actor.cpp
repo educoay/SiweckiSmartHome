@@ -44,11 +44,11 @@ String Actor::getFullRemoteName() {
   }
 }
 
-String Actor::createQueue() {
-  return getRemoteName();
+String Actor::createCommand() {
+  return "";
 }
 
-String Actor::createCommand() {
+String Actor::createCommand(int state) {
   return "";
 }
 

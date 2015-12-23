@@ -32,7 +32,7 @@ String ObjectRemotlyControlled::getSubRemotlyControlled(String queue) {
 
 void ObjectRemotlyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
-    controllerConnector->sendCommand(createQueue(), createCommand());
+    controllerConnector->sendCommand(getFullRemoteName(), createCommand());
     Serial.println("Update sent.");
   } else {
     Serial.println("No connector, update skipped");

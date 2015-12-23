@@ -61,10 +61,6 @@ void LightPoint::verifyControlPoint() {
   }
 }
 
-String LightPoint::createQueue() {
-  return getFullRemoteName();
-}
-
 String LightPoint::createCommand(int state) {
 	if (state == LOW) {
 		return COMMAND_OFF;

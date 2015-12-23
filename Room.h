@@ -26,7 +26,7 @@ class Room: public ObjectRemotlyControlled {
     virtual void initialize();
     virtual void verifyControlPoints();
     virtual String createCommand();
-    virtual String createQueue();
+    virtual String createCommand(int state);
     virtual void executeCommand(String queue, String command);
 };
 

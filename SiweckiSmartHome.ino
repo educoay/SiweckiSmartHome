@@ -42,3 +42,38 @@ void callback(char* topic, byte* payload, unsigned int length) {
   actor.executeCommand(topic, command);
   Serial.println("Callback finished.");
 }
+ 
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Setup begin...");
+  Ethernet.begin(mac);
+  controllerConnector.setMqttClient(&mqttClient);
+  controllerConnector.initialize(ACTOR_NAME);
+  Room *livingRoom = new Room(LIVINGROOM_NAME);
+  ceiling = new LightPoint(CEILING_BUTTON_PIN, CEILING_OUTPUT_PIN, CEILING_NAME);
+  corridor = new LightPoint(CORRIDOR_BUTTON_PIN, CORRIDOR_OUTPUT_PIN, CORRIDOR_NAME);
+  //Serial.println("Assign connectivity...");
+  ceiling->setControllerConnector(&controllerConnector);
+  corridor->setControllerConnector(&controllerConnector);
+  //Serial.println("Data structure created.");
+  actor.addRoom(livingRoom);
+  //Serial.println("Room addded.");
+  livingRoom->addPoint(ceiling);
+  livingRoom->addPoint(corridor);
+  Serial.println("ceiling: " + ceiling->getFullRemoteName());
+  Serial.println("corridor: " + corridor->getFullRemoteName());
+  actor.initialize();
+  Serial.println("Init done.");
+}
+ 
+void loop() {
+  //Serial.print("Loop... "); Serial.println(i++);
+  actor.verifyControlPoints();
+  mqttClient.loop();
+  delay(AFTER_CHANGE_DELAY);
+}
+
+
+ 
+
+ 
