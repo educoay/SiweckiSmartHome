@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(String name):ObjectRemotlyControlled(name) {
+Room::Room(String name):ObjectRemotelyControlled(name) {
   //this->name = name;
   points = 0;
   for(int i = 0; i < ROOM_MAX_POINTS; i++){
@@ -42,18 +42,18 @@ String Room::createCommand(int state) {
   return getRemoteName();
 }
 
-void Room::executeCommand(String queue, String command) {
-  String pointRemoteName = getNextRemotlyControlled(queue);
+void Room::executeCommand(String objectFullRemoteName, String command) {
+  String pointRemoteName = getNextRemotlyControlled(objectFullRemoteName);
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {
     if (pointsTable[i]->getRemoteName() == pointRemoteName) {
-      pointsTable[i]->executeCommand(queue, command);
+      pointsTable[i]->executeCommand(objectFullRemoteName, command);
       find = true;
     }
   }
   if (!find) {
-    Serial.println("There is no point '" + pointRemoteName  + "' in room '" + getRemoteName() + "' from command " + queue);
+    Serial.println("There is no point '" + pointRemoteName  + "' in room '" + getRemoteName() + "' from command " + objectFullRemoteName);
   }
 }
 

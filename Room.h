@@ -12,7 +12,7 @@
 
 #define ROOM_MAX_POINTS 20
 
-class Room: public ObjectRemotlyControlled {
+class Room: public ObjectRemotelyControlled {
   private:
     int points;
     
@@ -21,13 +21,13 @@ class Room: public ObjectRemotlyControlled {
  
   public:
     Room(String name);
-    ~Room();
+    virtual ~Room();
     void addPoint(Point* point);
     virtual void initialize();
     virtual void verifyControlPoints();
     virtual String createCommand();
     virtual String createCommand(int state);
-    virtual void executeCommand(String queue, String command);
+    virtual void executeCommand(String objectFullRemoteName, String command);
 };
 
 #endif

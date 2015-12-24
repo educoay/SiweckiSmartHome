@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-Actor::Actor(String name):ObjectRemotlyControlled(name) {
+Actor::Actor(String name):ObjectRemotelyControlled(name) {
   rooms = 0;
   for(int i = 0; i < ACTOR_MAX_ROOMS; i++){
     roomsTable[i] = NULL;

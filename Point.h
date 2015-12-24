@@ -7,12 +7,12 @@
 #ifndef Point_h
 #define Point_h
 
-#include "ObjectRemotlyControlled.h"
+#include "ObjectRemotelyControlled.h"
 
-class Point: public ObjectRemotlyControlled {
+class Point: public ObjectRemotelyControlled {
  
   public:
-    Point(String name):ObjectRemotlyControlled(name){};
+    Point(String name):ObjectRemotelyControlled(name){};
     virtual ~Point(){};
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;
