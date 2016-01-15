@@ -1,30 +1,40 @@
 #include "ObjectRemotelyControlled.h"
 
-String ObjectRemotelyControlled::getFullRemoteName() {
-  if (parent != NULL) {
-    return parent->getFullRemoteName() + LOCATION_DELIMETER + this->name;  
-  } else {
-    return LOCATION_DELIMETER + this->name;
+char* ObjectRemotelyControlled::getFullRemoteName(char* fullRemoteName) {
+	if (this->parent != NULL) {
+		parent->getFullRemoteName(fullRemoteName);
+	}
+	strcat(fullRemoteName, LOCATION_DELIMETER);
+	strcat(fullRemoteName, this->name);
+	return fullRemoteName;
+}
+
+int ObjectRemotelyControlled::getFullRemoteNameSize() {
+	int parentSize = 0;
+	if (parent != NULL) {
+		parentSize = parent->getFullRemoteNameSize();
+	};
+	return parentSize + sizeof(LOCATION_DELIMETER) + strlen(this->name);
   }
 }
 
-String ObjectRemotelyControlled::getRemoteName() {
+char* ObjectRemotelyControlled::getRemoteName() {
   return this->name;
 }
 
-String ObjectRemotelyControlled::getNextRemotlyControlled(String queue) {
-  int locationDelimeterIndex = queue.substring(1).indexOf(LOCATION_DELIMETER);
-  if (locationDelimeterIndex >= 0) {
-    return queue.substring(1,locationDelimeterIndex + 1);
+char* ObjectRemotelyControlled::getTopHierarchyName(char* objectFullRemoteName, char* topHierarchyName) {
+  int delimeterIndex = objectFullRemoteName.substring(1).indexOf(LOCATION_DELIMETER);
+  if (delimeterIndex >= 0) {
+    return objectFullRemoteName.substring(1,delimeterIndex + 1);
   } else {
-    return queue.substring(1);
+    return objectFullRemoteName.substring(1);
   } 
 }
 
-String ObjectRemotelyControlled::getSubRemotlyControlled(String queue) {
-  int locationDelimeterIndex = queue.substring(1).indexOf(LOCATION_DELIMETER);
-  if (locationDelimeterIndex > 0) {
-    return queue.substring(locationDelimeterIndex + 1);
+String ObjectRemotelyControlled::getSublocation(String objectFullRemoteName) {
+  int delimeterIndex = objectFullRemoteName.substring(1).indexOf(LOCATION_DELIMETER);
+  if (delimeterIndex > 0) {
+    return objectFullRemoteName.substring(delimeterIndex + 1);
   } else {
     return "";
   }   
@@ -32,10 +42,13 @@ String ObjectRemotelyControlled::getSubRemotlyControlled(String queue) {
 
 void ObjectRemotelyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
-    controllerConnector->sendCommand(getFullRemoteName(), createCommand());
-    Serial.println("Update sent.");
+	  char* objectFullRemoteName = new char[getFullRemoteNameSize() + 1];
+	  objectFullRemoteName = getFullRemoteName(objectFullRemoteName);
+	  controllerConnector->sendCommand(objectFullRemoteName, createCommand());
+	  delete objectFullRemoteName;
+	  Serial.println("Update sent.");
   } else {
-    Serial.println("No connector, update skipped");
+	  Serial.println("No connector, update skipped");
   }
 }
 

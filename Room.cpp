@@ -43,7 +43,7 @@ String Room::createCommand(int state) {
 }
 
 void Room::executeCommand(String objectFullRemoteName, String command) {
-  String pointRemoteName = getNextRemotlyControlled(objectFullRemoteName);
+  String pointRemoteName = getTopHierarchyName(objectFullRemoteName);
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {

@@ -53,11 +53,11 @@ String Actor::createCommand(int state) {
 }
 
 void Actor::executeCommand(String queue, String command) {
-  String actorRemoteName = getNextRemotlyControlled(queue);
-  String subQueue = getSubRemotlyControlled(queue);
-  String direction = getNextRemotlyControlled(subQueue);
-  String roomSubQueue = getSubRemotlyControlled(subQueue);
-  String roomRemoteName = getNextRemotlyControlled(roomSubQueue);
+  String actorRemoteName = getTopHierarchyName(queue);
+  String subQueue = getSublocation(queue);
+  String direction = getTopHierarchyName(subQueue);
+  String roomSubQueue = getSublocation(subQueue);
+  String roomRemoteName = getTopHierarchyName(roomSubQueue);
   bool find = false;
 /*
   Serial.println("Actor: " + actorRemoteName);
@@ -73,7 +73,7 @@ void Actor::executeCommand(String queue, String command) {
   for(int i = 0; i < rooms && !find; i++) {
     //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
     if (roomsTable[i]->getRemoteName() == roomRemoteName) {
-      roomsTable[i]->executeCommand(getSubRemotlyControlled(roomSubQueue), command);
+      roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
       find = true;
     }
   }
