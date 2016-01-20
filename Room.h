@@ -1,9 +1,9 @@
 /*
-  Room.h - Class for collection of points to be controlled in single room.
+  Room.h - Defines physical or virtual room for collection of points to be controlled.
+
   Created by Piotr Kaminski, 2015/07/12.
 */
 
-#include "Arduino.h"
 #include "Point.h"
 #include "SiweckiSmartHome.h"
 
@@ -12,7 +12,7 @@
 
 #define ROOM_MAX_POINTS 20
 
-class Room: public RemotlyControlled {
+class Room: public ObjectRemotelyControlled {
   private:
     int points;
     
@@ -21,13 +21,13 @@ class Room: public RemotlyControlled {
  
   public:
     Room(String name);
-    ~Room();
+    virtual ~Room();
     void addPoint(Point* point);
     virtual void initialize();
     virtual void verifyControlPoints();
     virtual String createCommand();
-    virtual String createQueue();
-    virtual void executeCommand(String queue, String command);
+    virtual String createCommand(int state);
+    virtual void executeCommand(String objectFullRemoteName, String command);
 };
 
 #endif

@@ -61,10 +61,6 @@ void LightPoint::verifyControlPoint() {
   }
 }
 
-String LightPoint::createQueue() {
-  return getFullRemoteName();
-}
-
 String LightPoint::createCommand(int state) {
 	if (state == LOW) {
 		return COMMAND_OFF;
@@ -77,13 +73,13 @@ String LightPoint::createCommand() {
   return createCommand(this->lightPointState);
 }
 
-void LightPoint::executeCommand(String queue, String command) {
+void LightPoint::executeCommand(String objectFullRemoteName, String command) {
   if (command == COMMAND_ON) {
       setLightPointOn();
   } else if (command == COMMAND_OFF) {
       setLightPointOff();
   } else {
-    Serial.println("Unknown action '" + command + "' for point " + getFullRemoteName());
+    Serial.println("Unknown action '" + command + "' for point " + objectFullRemoteName);
   };
   //Serial.println("Action " + command + " finished");
 }

@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-Actor::Actor(String name):RemotlyControlled(name) {
+Actor::Actor(String name):ObjectRemotelyControlled(name) {
   rooms = 0;
   for(int i = 0; i < ACTOR_MAX_ROOMS; i++){
     roomsTable[i] = NULL;
@@ -44,20 +44,20 @@ String Actor::getFullRemoteName() {
   }
 }
 
-String Actor::createQueue() {
-  return getRemoteName();
-}
-
 String Actor::createCommand() {
   return "";
 }
 
+String Actor::createCommand(int state) {
+  return "";
+}
+
 void Actor::executeCommand(String queue, String command) {
-  String actorRemoteName = getNextRemotlyControlled(queue);
-  String subQueue = getSubRemotlyControlled(queue);
-  String direction = getNextRemotlyControlled(subQueue);
-  String roomSubQueue = getSubRemotlyControlled(subQueue);
-  String roomRemoteName = getNextRemotlyControlled(roomSubQueue);
+  String actorRemoteName = getTopHierarchyName(queue);
+  String subQueue = getSublocation(queue);
+  String direction = getTopHierarchyName(subQueue);
+  String roomSubQueue = getSublocation(subQueue);
+  String roomRemoteName = getTopHierarchyName(roomSubQueue);
   bool find = false;
 /*
   Serial.println("Actor: " + actorRemoteName);
@@ -73,7 +73,7 @@ void Actor::executeCommand(String queue, String command) {
   for(int i = 0; i < rooms && !find; i++) {
     //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
     if (roomsTable[i]->getRemoteName() == roomRemoteName) {
-      roomsTable[i]->executeCommand(getSubRemotlyControlled(roomSubQueue), command);
+      roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
       find = true;
     }
   }

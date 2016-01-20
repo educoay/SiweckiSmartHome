@@ -17,20 +17,19 @@ class LightPoint: public Point {
 		int controlOutputPin;
     int buttonPreviousState;
     void setLightPointState(int state);
-    String createCommand(int state);
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
     LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector);
-    ~LightPoint();
+    virtual ~LightPoint();
 		virtual void initialize();
 		boolean isControlButtonPressed();
     void setLightPointOn();
     boolean isLightPointOn();
     void setLightPointOff();
-    virtual void executeCommand(String queue, String command);
+    virtual void executeCommand(String objectFullRemoteName, String command);
     virtual String createCommand();
-    virtual String createQueue();
+    virtual String createCommand(int state);
     virtual void verifyControlPoint();
 };
 

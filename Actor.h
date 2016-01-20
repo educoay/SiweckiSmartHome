@@ -8,13 +8,14 @@
 #define Actor_h
 
 #include "Arduino.h"
+
+#include "ObjectRemotelyControlled.h"
 #include "Point.h"
 #include "Room.h"
-#include "RemotlyControlled.h"
 
 #define ACTOR_MAX_ROOMS 20
 
-class Actor: public RemotlyControlled {
+class Actor: public ObjectRemotelyControlled {
   private:
     int rooms;
     
@@ -23,12 +24,12 @@ class Actor: public RemotlyControlled {
  
   public:
     Actor(String name);
-    ~Actor();
+    virtual ~Actor();
     void addRoom(Room* point);
     virtual void verifyControlPoints();
     virtual void initialize();   
     virtual String createCommand();
-    virtual String createQueue();
+    virtual String createCommand(int state);
     virtual void executeCommand(String queue, String command);
     virtual String getFullRemoteName();
 };

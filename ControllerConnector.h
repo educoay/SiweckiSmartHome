@@ -9,8 +9,8 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 
-const char STATE_DELIMETER = '#';
-const char LOCATION_DELIMETER = '/';
+const char* STATE_DELIMETER = {'#','\0'};
+const char* LOCATION_DELIMETER = {'/', '\0'};
 const String IN_DIRECTION = "In";
 const String OUT_DIRECTION = "Out";
 
