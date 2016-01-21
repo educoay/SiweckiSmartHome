@@ -15,7 +15,7 @@
 class Point: public ObjectRemotelyControlled {
  
   public:
-    Point(char* name):ObjectRemotelyControlled(name){};
+    Point(String name):ObjectRemotelyControlled(name){};
     virtual ~Point(){};
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;

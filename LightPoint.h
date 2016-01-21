@@ -12,11 +12,11 @@
 
 class LightPoint: public Point {
 	private:
-		int lightPointState;
-		int controlButtonPin;
-		int controlOutputPin;
-    int buttonPreviousState;
-    void setLightPointState(int state);
+		int lightPointState = 0;
+		int controlButtonPin = 0;
+		int controlOutputPin = 0;
+		int buttonPreviousState = 0;
+		void setLightPointState(int state);
  
 	public:
 		LightPoint(int controlButtonPin, int controlOutputPin, String name);
