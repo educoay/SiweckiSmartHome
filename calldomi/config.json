@@ -1,0 +1,33 @@
+{
+    "Home": {
+        "Configuration": {
+		“Instance”: “Ard1”,
+            "Debug": true,
+            "Mac": "00:12:FB:95:59:CF"
+        },
+        "Rooms": [
+            {
+                "Name": "LivingRoom",
+                "Points": [
+                    {
+                        "Type": "Light",
+                        "Name": "Ceiling1",
+                        "ControlPin": 2,
+                        "ButtonPin": 3
+                    }
+                ]
+            },
+			{
+                "Name": "Corridor",
+                "Points": [
+                    {
+                        "Type": "Light",
+                        "Name": "Ceiling1",
+                        "ControlPin": 6,
+                        "ButtonPin": 7
+                    }
+                ]
+            }
+        ]
+    }
+}
