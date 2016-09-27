@@ -1,9 +1,12 @@
 {
     "Home": {
-        "Configuration": {
+        "Config": {
 		“Instance”: “Ard1”,
             "Debug": true,
-            "Mac": "00:12:FB:95:59:CF"
+            "Mac": "00:12:FB:95:59:CF",
+		"MQTT-IP":"192.168.1.190",
+		"MQTT-Port":"1883"
+
         },
         "Rooms": [
             {
