@@ -44,7 +44,7 @@ void ObjectRemotelyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
 	  char* objectFullRemoteName = new char[getFullRemoteNameSize() + 1];
 	  objectFullRemoteName = getFullRemoteName(objectFullRemoteName);
-	  char* command = new char[20];
+		char* command = new char[MAX_COMMAND_LENGTH];
 	  controllerConnector->sendCommand(objectFullRemoteName, createCommand(command));
 	  delete objectFullRemoteName;
 	  delete command;

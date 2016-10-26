@@ -12,6 +12,11 @@
  * Any remotely controlled object needs to have a name to be identified.
  */
 class ObjectRemotelyControlled {
+  private:
+	/**
+	 * Max length for Command string
+	 */
+	static const int MAX_COMMAND_LENGTH = 20;
 
   protected:
     char* name;
@@ -108,6 +113,7 @@ class ObjectRemotelyControlled {
      * respond to command (by object full name) and perform execution.
      */
     virtual void executeCommand(const char* objectFullRemoteName, const char* command) = 0;
- };
+
+};
 
  #endif

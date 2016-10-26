@@ -80,21 +80,20 @@ void Actor::executeCommand(const char* queue, const char* command) {
 
 	bool find = false;
 
-
+/*
   DiagnosticOutputStream.sendln("Actor: ", actorRemoteName);
   DiagnosticOutputStream.sendln("SubQueue: ", subQueue);
   DiagnosticOutputStream.sendln("Direction: ", direction);
   DiagnosticOutputStream.sendln("Room: ", roomRemoteName);
   DiagnosticOutputStream.sendln("Room SubQueue: ", roomSubQueue);
+*/
 
-  DiagnosticOutputStream.sendln("Actor compare ", actorRemoteName,":" , this->name);
   if (strcmp(actorRemoteName, this->name) != 0) {
 	  DiagnosticOutputStream.sendln("Unknown actor name '", actorRemoteName, "'. Ignored");
 	  return;
   }
   
   for(int i = 0; i < rooms && !find; i++) {
-	  DiagnosticOutputStream.sendln("Room to check: ", roomsTable[i]->getRemoteName());
 	  if (strcmp(roomsTable[i]->getRemoteName(), roomRemoteName) == 0) {
 		  roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
 		  find = true;
