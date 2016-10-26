@@ -1,11 +1,12 @@
 #include "LightPoint.h"
+#include "Const.h"
 
-LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name):Point(name) {
+LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, const char* name):Point(name) {
 	this->controlButtonPin = controlButtonPin;
 	this->controlOutputPin = controlOutputPin;
 }
 
-LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector):Point(name) {
+LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, const char* name, ControllerConnector *controllerConnector):Point(name) {
   LightPoint(controlButtonPin, controlOutputPin, name);
   this->setControllerConnector(controllerConnector);
 }
@@ -24,7 +25,7 @@ boolean LightPoint::isControlButtonPressed() {
   if (buttonNow != this->buttonPreviousState) {
     this->buttonPreviousState = buttonNow;
     if(buttonNow == HIGH) {
-        Serial.println(this->getFullRemoteName() + " button pressed");
+        //Serial.println(this->getFullRemoteName() + " button pressed");
         return true;
     };
   };
@@ -37,12 +38,10 @@ boolean LightPoint::isLightPointOn() {
 
 void LightPoint::setLightPointOn() {
   setLightPointState(HIGH);
-  Serial.println(getFullRemoteName() + " on.");
 }
 
 void LightPoint::setLightPointOff() {
   setLightPointState(LOW);
-  Serial.println(getFullRemoteName() + " off.");
 }
  
 void LightPoint::setLightPointState(int state) {
@@ -61,25 +60,29 @@ void LightPoint::verifyControlPoint() {
   }
 }
 
-String LightPoint::createCommand(int state) {
+char* LightPoint::createCommand(int state, char* command) {
 	if (state == LOW) {
-		return COMMAND_OFF;
+		strcpy(command, COMMAND_OFF);
 	} else {
-		return COMMAND_ON;
+		strcpy(command, COMMAND_ON);
 	}
+	return command;
 }
 
-String LightPoint::createCommand() {
-  return createCommand(this->lightPointState);
+char* LightPoint::createCommand(char* command) {
+  return createCommand(this->lightPointState, command);
 }
 
-void LightPoint::executeCommand(String objectFullRemoteName, String command) {
+void LightPoint::executeCommand(const char* objectFullRemoteName, const char* command) {
   if (command == COMMAND_ON) {
       setLightPointOn();
   } else if (command == COMMAND_OFF) {
       setLightPointOff();
   } else {
-    Serial.println("Unknown action '" + command + "' for point " + objectFullRemoteName);
+    Serial.print("Unknown action '");
+    Serial.print(command);
+    Serial.print("' for point ");
+    Serial.println(objectFullRemoteName);
   };
   //Serial.println("Action " + command + " finished");
 }

@@ -23,15 +23,16 @@ class Actor: public ObjectRemotelyControlled {
     Room *roomsTable[ACTOR_MAX_ROOMS];
  
   public:
-    Actor(String name);
+    Actor(const char* name);
     virtual ~Actor();
     void addRoom(Room* point);
     virtual void verifyControlPoints();
     virtual void initialize();   
-    virtual String createCommand();
-    virtual String createCommand(int state);
-    virtual void executeCommand(String queue, String command);
-    virtual String getFullRemoteName();
+    virtual char* createCommand(char* command);
+    virtual char* createCommand(int state, char* command);
+    virtual void executeCommand(const char* queue, const char* command);
+    virtual int getFullRemoteNameSize();
+    virtual char* getFullRemoteName(char* fullRemoteName);
 };
 
 #endif

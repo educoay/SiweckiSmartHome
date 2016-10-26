@@ -1,6 +1,7 @@
 #include "Actor.h"
+#include "Const.h"
 
-Actor::Actor(String name):ObjectRemotelyControlled(name) {
+Actor::Actor(const char* name):ObjectRemotelyControlled(name) {
   rooms = 0;
   for(int i = 0; i < ACTOR_MAX_ROOMS; i++){
     roomsTable[i] = NULL;
@@ -35,30 +36,51 @@ void Actor::verifyControlPoints() {
   }
 }
 
-
-String Actor::getFullRemoteName() {
-  if (parent != NULL) {
-    return parent->getFullRemoteName() + LOCATION_DELIMETER + this->name;  
-  } else {
-    return LOCATION_DELIMETER + this->name + LOCATION_DELIMETER + OUT_DIRECTION;
-  }
+int Actor::getFullRemoteNameSize() {
+	return strlen(LOCATION_DELIMETER) + strlen(this->name) + max(strlen(IN_DIRECTION), strlen(OUT_DIRECTION));
 }
 
-String Actor::createCommand() {
-  return "";
+char* Actor::getFullRemoteName(char* fullRemoteName) {
+	if (parent != NULL) {
+		return parent->getFullRemoteName(fullRemoteName);
+	} else {
+		strcat(fullRemoteName, LOCATION_DELIMETER);
+		strcat(fullRemoteName, this->name);
+		strcat(fullRemoteName, LOCATION_DELIMETER);
+		strcat(fullRemoteName, OUT_DIRECTION);
+		return fullRemoteName;
+	}
 }
 
-String Actor::createCommand(int state) {
-  return "";
+char* Actor::createCommand(char* command) {
+  return command;
 }
 
-void Actor::executeCommand(String queue, String command) {
-  String actorRemoteName = getTopHierarchyName(queue);
-  String subQueue = getSublocation(queue);
-  String direction = getTopHierarchyName(subQueue);
-  String roomSubQueue = getSublocation(subQueue);
-  String roomRemoteName = getTopHierarchyName(roomSubQueue);
-  bool find = false;
+char* Actor::createCommand(int state, char* command) {
+  return command;
+}
+
+void Actor::executeCommand(const char* queue, const char* command) {
+	//get Actor name form queue /Adr0/Out/Room1/Point1 -> Adr0
+	char actorRemoteName[NAME_LIMIT];
+	getTopHierarchyName(queue, actorRemoteName);
+
+	//get name of queue which indicates direction
+	// /Adr0/Out/Room1/Point1 -> /Out/Room1/Point1
+	char* subQueue = getSublocation(queue);
+	char direction[NAME_LIMIT];
+	// /Out/Room1/Point1 -> Out
+	getTopHierarchyName(subQueue, direction);
+
+	char roomSubQueue[NAME_LIMIT];
+	// /Out/Room1/Point1 -> /Room1/Point1
+	getSublocation(subQueue);
+	char roomRemoteName[NAME_LIMIT];
+	// /Room1/Point1 -> Room1
+	getTopHierarchyName(roomSubQueue, roomRemoteName);
+
+	bool find = false;
+
 /*
   Serial.println("Actor: " + actorRemoteName);
   Serial.println("SubQueue: " + subQueue);
@@ -66,20 +88,25 @@ void Actor::executeCommand(String queue, String command) {
   Serial.println("Room: '" + roomRemoteName + "'");
   Serial.println("Room SubQueue: " + roomSubQueue);
 */
-  if (actorRemoteName != this->name) {
-    Serial.println("Unknown actor name '" + actorRemoteName + "'. Ignored");
-  }
+  if (!strcmp(actorRemoteName, this->name)) {
+	  Serial.print("Unknown actor name '");
+	  Serial.print(actorRemoteName);
+	  Serial.println("'. Ignored");
+  	  }
   
   for(int i = 0; i < rooms && !find; i++) {
     //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
-    if (roomsTable[i]->getRemoteName() == roomRemoteName) {
-      roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
-      find = true;
-    }
+	  if (strcmp(roomsTable[i]->getRemoteName(), roomRemoteName)) {
+		  roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
+		  find = true;
+	  }
   }
   //Serial.println("Rooms checked.");
   if (!find) {
-    Serial.println("There is no room in actor from command " + queue + " " + command);
+	  Serial.print("There is no room in actor from command ");
+	  Serial.print(queue);
+	  Serial.print(" ");
+	  Serial.println(command);
   }
 }
 

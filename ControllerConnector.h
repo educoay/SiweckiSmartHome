@@ -9,11 +9,6 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 
-const char* STATE_DELIMETER = {'#','\0'};
-const char* LOCATION_DELIMETER = {'/', '\0'};
-const String IN_DIRECTION = "In";
-const String OUT_DIRECTION = "Out";
-
 class ControllerConnector {
   private:
     byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
@@ -32,8 +27,8 @@ class ControllerConnector {
     ControllerConnector();
     ~ControllerConnector();
     void setMqttClient(PubSubClient *_mqttClient) {this->mqttClient = _mqttClient;};
-    void sendCommand(String queue, String command);
-    void initialize(String actorName);
+    void sendCommand(char* queue, char* command);
+    void initialize(const char* connectivityClientName);
     boolean checkOutstandingMessages();
 };
 

@@ -5,23 +5,24 @@
 #include "Actor.h"
 #include "Room.h"
 #include "LightPoint.h"
+#include "Configuration.h"
 
-const String ACTOR_NAME = "Ard1";
-const String LIVINGROOM_NAME = "LivingRoom";
-const String CORRIDOR_NAME = "Corridor";
+const char* ACTOR_NAME = "Ard1";
+const char* LIVINGROOM_NAME = "LivingRoom";
+const char* CORRIDOR_NAME = "Corridor";
 const int CORRIDOR_BUTTON_PIN = 2;
 const int CORRIDOR_OUTPUT_PIN = 3;
-const String CEILING_NAME = "Ceiling";
+const char* CEILING_NAME = "Ceiling";
 const int CEILING_BUTTON_PIN = 6;
 const int CEILING_OUTPUT_PIN = 7;
 
 byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
-
-byte mqttServerIP[4] = {192, 168, 1, 190};
+byte mqttServerIP[4] = {192, 168, 1, 195};
 int mqttServerPort = 1883;
 
 const int AFTER_CHANGE_DELAY = 100;
 
+Configuration config;
 Actor actor = Actor(ACTOR_NAME);
 ControllerConnector controllerConnector = ControllerConnector();
 
@@ -60,10 +61,22 @@ void setup() {
   //Serial.println("Room addded.");
   livingRoom->addPoint(ceiling);
   livingRoom->addPoint(corridor);
-  Serial.println("ceiling: " + ceiling->getFullRemoteName());
-  Serial.println("corridor: " + corridor->getFullRemoteName());
+  if (config.isDebug) {
+	  char* ceilingFullRemoteName = new char[ceiling->getFullRemoteNameSize()];
+	  ceiling->getFullRemoteName(ceilingFullRemoteName);
+	  Serial.print("ceiling: ");
+	  Serial.println(ceilingFullRemoteName);
+
+	  char *corridorFullRemoteName = new char[corridor->getFullRemoteNameSize()];
+	  corridor->getFullRemoteName(corridorFullRemoteName);
+  	  Serial.print("corridor: ");
+  	  Serial.println(corridorFullRemoteName);
+  }
+
   actor.initialize();
-  Serial.println("Init done.");
+  if (config.isDebug) {
+	  Serial.println("Init done.");
+  }
 }
  
 void loop() {

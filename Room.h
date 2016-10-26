@@ -4,11 +4,11 @@
   Created by Piotr Kaminski, 2015/07/12.
 */
 
-#include "Point.h"
-#include "SiweckiSmartHome.h"
-
 #ifndef Room_h
 #define Room_h
+
+#include "Point.h"
+#include "SiweckiSmartHome.h"
 
 #define ROOM_MAX_POINTS 20
 
@@ -20,14 +20,14 @@ class Room: public ObjectRemotelyControlled {
     Point *pointsTable[ROOM_MAX_POINTS];
  
   public:
-    Room(String name);
+    Room(const char* name);
     virtual ~Room();
     void addPoint(Point* point);
     virtual void initialize();
     virtual void verifyControlPoints();
-    virtual String createCommand();
-    virtual String createCommand(int state);
-    virtual void executeCommand(String objectFullRemoteName, String command);
+    virtual char* createCommand(char* command);
+    virtual char* createCommand(int state, char* command);
+    virtual void executeCommand(const char* objectFullRemoteName, const char* command);
 };
 
 #endif

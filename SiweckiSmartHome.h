@@ -5,7 +5,6 @@
 #ifndef SiweckiSmartHome_h
 #define SiweckiSmartHome_h
 
-#define COMMAND_ON "ON"
-#define COMMAND_OFF "OFF"
+#define NAME_LIMIT 20
 
 #endif

@@ -3,34 +3,34 @@
   Created by Piotr Kaminski, 2015/07/05.
 */
 
+#ifndef LightPoint_h
+#define LightPoint_h
+
 #include "Arduino.h"
 #include "SiweckiSmartHome.h"
 #include "Point.h"
-
-#ifndef LightPoint_h
-#define LightPoint_h
 
 class LightPoint: public Point {
 	private:
 		int lightPointState;
 		int controlButtonPin;
 		int controlOutputPin;
-    int buttonPreviousState;
-    void setLightPointState(int state);
+		int buttonPreviousState;
+		void setLightPointState(int state);
  
 	public:
-		LightPoint(int controlButtonPin, int controlOutputPin, String name);
-    LightPoint(int controlButtonPin, int controlOutputPin, String name, ControllerConnector *controllerConnector);
-    virtual ~LightPoint();
+		LightPoint(int controlButtonPin, int controlOutputPin, const char* name);
+		LightPoint(int controlButtonPin, int controlOutputPin, const char* name, ControllerConnector *controllerConnector);
+		virtual ~LightPoint();
 		virtual void initialize();
 		boolean isControlButtonPressed();
-    void setLightPointOn();
-    boolean isLightPointOn();
-    void setLightPointOff();
-    virtual void executeCommand(String objectFullRemoteName, String command);
-    virtual String createCommand();
-    virtual String createCommand(int state);
-    virtual void verifyControlPoint();
+		void setLightPointOn();
+		boolean isLightPointOn();
+		void setLightPointOff();
+		virtual void executeCommand(const char* objectFullRemoteName, const char* command);
+		virtual char* createCommand(char* command);
+		virtual char* createCommand(int state,  char* command);
+		virtual void verifyControlPoint();
 };
 
 #endif

@@ -1,26 +1,46 @@
 
 #include "ControllerConnector.h"
 #include "Actor.h"
+#include "Const.h"
+
+static const char* ANY_QUEUE_WILDCARD = "#";
 
 ControllerConnector::ControllerConnector() {
   this->mqttClient = NULL;
-
+  this->clientName = NULL;
+  this->listenQueueRange = NULL;
 }
 
 ControllerConnector::~ControllerConnector() {
   delete this->mqttClient;
+  delete this->clientName;
+  delete this->listenQueueRange;
 }
 
-void ControllerConnector::initialize(String actorName) {
+void ControllerConnector::initialize(const char* connectivityClientName) {
   Serial.println("ControllerConnector init... ");
 
-  actorName.toCharArray(this->clientName, actorName.length() + 1);
-  String sListenQueueRange = LOCATION_DELIMETER + actorName 
-                + LOCATION_DELIMETER + IN_DIRECTION + LOCATION_DELIMETER + '#';
+  //make a copy of clientName
+  delete this->clientName;
+  this->clientName = strdup(connectivityClientName);
+
   delete this->listenQueueRange;
-  this->listenQueueRange = new char[sListenQueueRange.length() + 1];
-  sListenQueueRange.toCharArray(this->listenQueueRange, sListenQueueRange.length() + 1);
-  Serial.println("Queue: " + sListenQueueRange);
+  this->listenQueueRange = new char[
+									strlen(LOCATION_DELIMETER) +
+									strlen(this->clientName) +
+									strlen(LOCATION_DELIMETER) +
+									strlen(IN_DIRECTION) +
+									strlen(LOCATION_DELIMETER) +
+									strlen(ANY_QUEUE_WILDCARD) +
+									1];
+  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
+  strcpy(this->listenQueueRange,this->clientName);
+  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
+  strcpy(this->listenQueueRange,IN_DIRECTION);
+  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
+  strcpy(this->listenQueueRange,ANY_QUEUE_WILDCARD);
+  Serial.print("Queue: ");
+  Serial.println(this->listenQueueRange);
   
   initializeMqtt();
   Serial.println("ControllerConnector init done.");
@@ -48,26 +68,23 @@ boolean ControllerConnector::checkOutstandingMessages() {
   return mqttClient->loop();
 }
 
-void ControllerConnector::sendCommand(String queue, String command) {
-  Serial.println("Command to send: " + queue + " " + command);
+void ControllerConnector::sendCommand(char* queue, char* command) {
+  Serial.print("Command to send: ");
+  Serial.print(queue);
+  Serial.print(" ");
+  Serial.println(command);
 
   if (!mqttClient->connected()) {
      initializeMqtt();
   }
-
-
-  char cCommand[command.length() + 1];        
-  command.toCharArray(cCommand, command.length()+1);
-  char qQueue[queue.length() + 1];        
-  queue.toCharArray(qQueue, queue.length()+1);
   
-  if (mqttClient->publish(qQueue, cCommand)) {
+  if (mqttClient->publish(queue, command)) {
       Serial.print("Command "); 
-      Serial.print(qQueue);
+      Serial.print(queue);
       Serial.println(" published."); 
   } else {
       Serial.print("Command "); 
-      Serial.print(qQueue);
+      Serial.print(queue);
       Serial.println(" publish failed."); 
   } 
 }

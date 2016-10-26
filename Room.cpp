@@ -1,6 +1,6 @@
 #include "Room.h"
 
-Room::Room(String name):ObjectRemotelyControlled(name) {
+Room::Room(const char* name):ObjectRemotelyControlled(name) {
   //this->name = name;
   points = 0;
   for(int i = 0; i < ROOM_MAX_POINTS; i++){
@@ -34,16 +34,17 @@ void Room::verifyControlPoints() {
   }
 }
 
-String Room::createCommand() {
-  return getRemoteName();
+char* Room::createCommand(char* command) {
+  return command;
 }
 
-String Room::createCommand(int state) {
-  return getRemoteName();
+char* Room::createCommand(int state, char* command) {
+  return command;
 }
 
-void Room::executeCommand(String objectFullRemoteName, String command) {
-  String pointRemoteName = getTopHierarchyName(objectFullRemoteName);
+void Room::executeCommand(const char* objectFullRemoteName, const char* command) {
+  char pointRemoteName[NAME_LIMIT];
+  getTopHierarchyName(objectFullRemoteName, pointRemoteName);
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {
@@ -53,7 +54,12 @@ void Room::executeCommand(String objectFullRemoteName, String command) {
     }
   }
   if (!find) {
-    Serial.println("There is no point '" + pointRemoteName  + "' in room '" + getRemoteName() + "' from command " + objectFullRemoteName);
+    Serial.print("There is no point '");
+    Serial.print(pointRemoteName);
+    Serial.print("' in room '");
+    Serial.print(getRemoteName());
+    Serial.print("' from command ");
+    Serial.println(objectFullRemoteName);
   }
 }
 

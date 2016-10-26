@@ -1,8 +1,9 @@
 #include "ObjectRemotelyControlled.h"
+#include "Const.h"
 
 char* ObjectRemotelyControlled::getFullRemoteName(char* fullRemoteName) {
 	if (this->parent != NULL) {
-		parent->getFullRemoteName(fullRemoteName);
+				parent->getFullRemoteName(fullRemoteName);
 	}
 	strcat(fullRemoteName, LOCATION_DELIMETER);
 	strcat(fullRemoteName, this->name);
@@ -15,37 +16,36 @@ int ObjectRemotelyControlled::getFullRemoteNameSize() {
 		parentSize = parent->getFullRemoteNameSize();
 	};
 	return parentSize + sizeof(LOCATION_DELIMETER) + strlen(this->name);
-  }
 }
 
 char* ObjectRemotelyControlled::getRemoteName() {
   return this->name;
 }
 
-char* ObjectRemotelyControlled::getTopHierarchyName(char* objectFullRemoteName, char* topHierarchyName) {
-  int delimeterIndex = objectFullRemoteName.substring(1).indexOf(LOCATION_DELIMETER);
-  if (delimeterIndex >= 0) {
-    return objectFullRemoteName.substring(1,delimeterIndex + 1);
-  } else {
-    return objectFullRemoteName.substring(1);
-  } 
+char* ObjectRemotelyControlled::getTopHierarchyName(const char* objectFullRemoteName, char* topHierarchyName) {
+	//char* start = objectFullRemoteName;
+	if (objectFullRemoteName[0] == LOCATION_DELIMETER[0]) {
+		objectFullRemoteName++;
+	}
+	char* end = strstr(objectFullRemoteName, LOCATION_DELIMETER);
+	if (!end) {
+		return NULL;
+	}
+	return strncpy(topHierarchyName, objectFullRemoteName, end-objectFullRemoteName);
 }
 
-String ObjectRemotelyControlled::getSublocation(String objectFullRemoteName) {
-  int delimeterIndex = objectFullRemoteName.substring(1).indexOf(LOCATION_DELIMETER);
-  if (delimeterIndex > 0) {
-    return objectFullRemoteName.substring(delimeterIndex + 1);
-  } else {
-    return "";
-  }   
+char* ObjectRemotelyControlled::getSublocation(const char* objectFullRemoteName) {
+	return strstr(objectFullRemoteName++, LOCATION_DELIMETER);
 }
 
 void ObjectRemotelyControlled::sendStateUpdate() {
   if (controllerConnector != NULL) {
 	  char* objectFullRemoteName = new char[getFullRemoteNameSize() + 1];
 	  objectFullRemoteName = getFullRemoteName(objectFullRemoteName);
-	  controllerConnector->sendCommand(objectFullRemoteName, createCommand());
+	  char* command = new char[20];
+	  controllerConnector->sendCommand(objectFullRemoteName, createCommand(command));
 	  delete objectFullRemoteName;
+	  delete command;
 	  Serial.println("Update sent.");
   } else {
 	  Serial.println("No connector, update skipped");
