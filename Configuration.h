@@ -14,7 +14,7 @@ public:
 	unsigned int mqttServerIP[4] = {192, 168, 1, 190};
 	int mqttServerPort = 1883;
 	int AFTER_CHANGE_DELAY = 100;
-	bool isDebug = false;
+	bool isDebug = true;
 
 	Configuration();
 	virtual ~Configuration();

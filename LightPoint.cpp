@@ -1,5 +1,6 @@
 #include "LightPoint.h"
 #include "Const.h"
+#include "GeneralOutputStream.h"
 
 LightPoint::LightPoint(int controlButtonPin, int controlOutputPin, const char* name):Point(name) {
 	this->controlButtonPin = controlButtonPin;
@@ -74,15 +75,11 @@ char* LightPoint::createCommand(char* command) {
 }
 
 void LightPoint::executeCommand(const char* objectFullRemoteName, const char* command) {
-  if (command == COMMAND_ON) {
+  if (strcmp(command, COMMAND_ON) == 0) {
       setLightPointOn();
-  } else if (command == COMMAND_OFF) {
+  } else if (strcmp(command, COMMAND_OFF) == 0) {
       setLightPointOff();
   } else {
-    Serial.print("Unknown action '");
-    Serial.print(command);
-    Serial.print("' for point ");
-    Serial.println(objectFullRemoteName);
+    DiagnosticOutputStream.sendln("Unknown action '", command, "' for point ", objectFullRemoteName);
   };
-  //Serial.println("Action " + command + " finished");
 }

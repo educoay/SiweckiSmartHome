@@ -1,5 +1,6 @@
 #include "ObjectRemotelyControlled.h"
 #include "Const.h"
+#include "GeneralOutputStream.h"
 
 char* ObjectRemotelyControlled::getFullRemoteName(char* fullRemoteName) {
 	if (this->parent != NULL) {
@@ -23,19 +24,20 @@ char* ObjectRemotelyControlled::getRemoteName() {
 }
 
 char* ObjectRemotelyControlled::getTopHierarchyName(const char* objectFullRemoteName, char* topHierarchyName) {
-	//char* start = objectFullRemoteName;
 	if (objectFullRemoteName[0] == LOCATION_DELIMETER[0]) {
 		objectFullRemoteName++;
 	}
 	char* end = strstr(objectFullRemoteName, LOCATION_DELIMETER);
-	if (!end) {
-		return NULL;
+	if (end == NULL) {
+		return strcpy(topHierarchyName, objectFullRemoteName);
 	}
-	return strncpy(topHierarchyName, objectFullRemoteName, end-objectFullRemoteName);
+	strncpy(topHierarchyName, objectFullRemoteName, end-objectFullRemoteName);
+	topHierarchyName[end-objectFullRemoteName] = '\0';
+	return topHierarchyName;
 }
 
 char* ObjectRemotelyControlled::getSublocation(const char* objectFullRemoteName) {
-	return strstr(objectFullRemoteName++, LOCATION_DELIMETER);
+	return strstr(++objectFullRemoteName, LOCATION_DELIMETER);
 }
 
 void ObjectRemotelyControlled::sendStateUpdate() {
@@ -46,9 +48,9 @@ void ObjectRemotelyControlled::sendStateUpdate() {
 	  controllerConnector->sendCommand(objectFullRemoteName, createCommand(command));
 	  delete objectFullRemoteName;
 	  delete command;
-	  Serial.println("Update sent.");
+	  DiagnosticOutputStream.sendln("Update sent.");
   } else {
-	  Serial.println("No connector, update skipped");
+	  DiagnosticOutputStream.sendln("No connector, update skipped");
   }
 }
 

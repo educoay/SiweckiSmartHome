@@ -2,6 +2,7 @@
 #include "ControllerConnector.h"
 #include "Actor.h"
 #include "Const.h"
+#include "GeneralOutputStream.h"
 
 static const char* ANY_QUEUE_WILDCARD = "#";
 
@@ -33,17 +34,17 @@ void ControllerConnector::initialize(const char* connectivityClientName) {
 									strlen(LOCATION_DELIMETER) +
 									strlen(ANY_QUEUE_WILDCARD) +
 									1];
-  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
-  strcpy(this->listenQueueRange,this->clientName);
-  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
-  strcpy(this->listenQueueRange,IN_DIRECTION);
-  strcpy(this->listenQueueRange,LOCATION_DELIMETER);
-  strcpy(this->listenQueueRange,ANY_QUEUE_WILDCARD);
-  Serial.print("Queue: ");
-  Serial.println(this->listenQueueRange);
+
+  strcpy(this->listenQueueRange, LOCATION_DELIMETER);
+  strcat(this->listenQueueRange, this->clientName);
+  strcat(this->listenQueueRange, LOCATION_DELIMETER);
+  strcat(this->listenQueueRange, IN_DIRECTION);
+  strcat(this->listenQueueRange, LOCATION_DELIMETER);
+  strcat(this->listenQueueRange, ANY_QUEUE_WILDCARD);
+  DiagnosticOutputStream.sendln("Queue: ", this->listenQueueRange);
   
   initializeMqtt();
-  Serial.println("ControllerConnector init done.");
+  DiagnosticOutputStream.sendln("ControllerConnector init done.");
 }
 
  
@@ -52,15 +53,14 @@ void ControllerConnector::initializeMqtt()
   Serial.println("Init MQTT...");
   if (this->mqttClient != NULL) {
     if (mqttClient->connect(this->clientName, this->mqttServerUsername, this->mqttServerPassword)) {
-      Serial.print("Subscribe queue range: ");
-      Serial.println(this->listenQueueRange);
+      DiagnosticOutputStream.sendln("Subscribe queue range: ", this->listenQueueRange);
       mqttClient->subscribe(this->listenQueueRange);
-      Serial.println("MQTT connect OK");
+      DiagnosticOutputStream.sendln("MQTT connect OK");
     } else {
-      Serial.println("MQTT connect failed");
+    	DiagnosticOutputStream.sendln("MQTT connect failed");
     }
   } else {
-    Serial.println("mqttClient is null");
+	  DiagnosticOutputStream.sendln("mqttClient is null");
   }
 }
 
@@ -69,22 +69,15 @@ boolean ControllerConnector::checkOutstandingMessages() {
 }
 
 void ControllerConnector::sendCommand(char* queue, char* command) {
-  Serial.print("Command to send: ");
-  Serial.print(queue);
-  Serial.print(" ");
-  Serial.println(command);
+  DiagnosticOutputStream.sendln("Command to send: ", queue, " ", command);
 
   if (!mqttClient->connected()) {
      initializeMqtt();
   }
   
   if (mqttClient->publish(queue, command)) {
-      Serial.print("Command "); 
-      Serial.print(queue);
-      Serial.println(" published."); 
+	  DiagnosticOutputStream.sendln("Command ", queue, " published.");
   } else {
-      Serial.print("Command "); 
-      Serial.print(queue);
-      Serial.println(" publish failed."); 
+	  DiagnosticOutputStream.sendln("Command ", queue, " publish failed.");
   } 
 }

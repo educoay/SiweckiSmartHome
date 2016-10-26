@@ -1,4 +1,5 @@
 #include "Room.h"
+#include "GeneralOutputStream.h"
 
 Room::Room(const char* name):ObjectRemotelyControlled(name) {
   //this->name = name;
@@ -43,23 +44,22 @@ char* Room::createCommand(int state, char* command) {
 }
 
 void Room::executeCommand(const char* objectFullRemoteName, const char* command) {
+  DiagnosticOutputStream.sendln("ObjectFullRemoteName: ",objectFullRemoteName);
+
   char pointRemoteName[NAME_LIMIT];
   getTopHierarchyName(objectFullRemoteName, pointRemoteName);
+  DiagnosticOutputStream.sendln("Point Name: ",pointRemoteName);
+
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {
-    if (pointsTable[i]->getRemoteName() == pointRemoteName) {
+    if (strcmp(pointsTable[i]->getRemoteName(), pointRemoteName) == 0) {
       pointsTable[i]->executeCommand(objectFullRemoteName, command);
       find = true;
     }
   }
   if (!find) {
-    Serial.print("There is no point '");
-    Serial.print(pointRemoteName);
-    Serial.print("' in room '");
-    Serial.print(getRemoteName());
-    Serial.print("' from command ");
-    Serial.println(objectFullRemoteName);
+	DiagnosticOutputStream.sendln("There is no point ", pointRemoteName, " from command ", objectFullRemoteName);
   }
 }
 

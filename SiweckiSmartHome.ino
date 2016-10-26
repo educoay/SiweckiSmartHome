@@ -6,6 +6,7 @@
 #include "Room.h"
 #include "LightPoint.h"
 #include "Configuration.h"
+#include "GeneralOutputStream.h"
 
 const char* ACTOR_NAME = "Ard1";
 const char* LIVINGROOM_NAME = "LivingRoom";
@@ -17,12 +18,13 @@ const int CEILING_BUTTON_PIN = 6;
 const int CEILING_OUTPUT_PIN = 7;
 
 byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
-byte mqttServerIP[4] = {192, 168, 1, 195};
+byte mqttServerIP[4] = {192, 168, 1, 190};
 int mqttServerPort = 1883;
 
 const int AFTER_CHANGE_DELAY = 100;
 
 Configuration config;
+
 Actor actor = Actor(ACTOR_NAME);
 ControllerConnector controllerConnector = ControllerConnector();
 
@@ -46,7 +48,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
  
 void setup() {
   Serial.begin(9600);
-  Serial.println("Setup begin...");
+  DiagnosticOutputStream.setSendToSerial(config.isDebug);
+  DiagnosticOutputStream.sendln("Setup begin...");
   Ethernet.begin(mac);
   controllerConnector.setMqttClient(&mqttClient);
   controllerConnector.initialize(ACTOR_NAME);
@@ -64,19 +67,18 @@ void setup() {
   if (config.isDebug) {
 	  char* ceilingFullRemoteName = new char[ceiling->getFullRemoteNameSize()];
 	  ceiling->getFullRemoteName(ceilingFullRemoteName);
-	  Serial.print("ceiling: ");
-	  Serial.println(ceilingFullRemoteName);
+	  DiagnosticOutputStream.sendln("ceiling: ", ceilingFullRemoteName);
+	  delete ceilingFullRemoteName;
 
 	  char *corridorFullRemoteName = new char[corridor->getFullRemoteNameSize()];
 	  corridor->getFullRemoteName(corridorFullRemoteName);
-  	  Serial.print("corridor: ");
-  	  Serial.println(corridorFullRemoteName);
+	  DiagnosticOutputStream.sendln("corridor: ", corridorFullRemoteName);
+	  delete corridorFullRemoteName;
   }
 
+  DiagnosticOutputStream.sendln("Actor init... ");
   actor.initialize();
-  if (config.isDebug) {
-	  Serial.println("Init done.");
-  }
+  DiagnosticOutputStream.sendln("Init done.");
 }
  
 void loop() {

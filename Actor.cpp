@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "Const.h"
+#include "GeneralOutputStream.h"
 
 Actor::Actor(const char* name):ObjectRemotelyControlled(name) {
   rooms = 0;
@@ -23,7 +24,6 @@ void Actor::addRoom(Room* room) {
 }
 
 void Actor::initialize() {
-  Serial.println("Actor init... ");
   for(int i = 0; i < rooms; i++){
     roomsTable[i]->initialize();
   };
@@ -31,7 +31,7 @@ void Actor::initialize() {
 
 void Actor::verifyControlPoints() {
   for(int i = 0; i < rooms; i++){
-    //Serial.println("Room: " + roomsTable[i]->getRemoteName());
+    //DiagnosticOutputStream.sendln("Room: ", roomsTable[i]->getRemoteName());
     roomsTable[i]->verifyControlPoints();
   }
 }
@@ -66,47 +66,43 @@ void Actor::executeCommand(const char* queue, const char* command) {
 	getTopHierarchyName(queue, actorRemoteName);
 
 	//get name of queue which indicates direction
-	// /Adr0/Out/Room1/Point1 -> /Out/Room1/Point1
+	// /Adr0/In/Room1/Point1 -> /In/Room1/Point1
 	char* subQueue = getSublocation(queue);
 	char direction[NAME_LIMIT];
-	// /Out/Room1/Point1 -> Out
+	// /In/Room1/Point1 -> In
 	getTopHierarchyName(subQueue, direction);
 
-	char roomSubQueue[NAME_LIMIT];
-	// /Out/Room1/Point1 -> /Room1/Point1
-	getSublocation(subQueue);
+	//get the name of Room, /In/Room1/Point1 -> /Room1/Point1
+	char* roomSubQueue = getSublocation(subQueue);
 	char roomRemoteName[NAME_LIMIT];
 	// /Room1/Point1 -> Room1
 	getTopHierarchyName(roomSubQueue, roomRemoteName);
 
 	bool find = false;
 
-/*
-  Serial.println("Actor: " + actorRemoteName);
-  Serial.println("SubQueue: " + subQueue);
-  Serial.println("Direction: " + direction);  
-  Serial.println("Room: '" + roomRemoteName + "'");
-  Serial.println("Room SubQueue: " + roomSubQueue);
-*/
-  if (!strcmp(actorRemoteName, this->name)) {
-	  Serial.print("Unknown actor name '");
-	  Serial.print(actorRemoteName);
-	  Serial.println("'. Ignored");
-  	  }
+
+  DiagnosticOutputStream.sendln("Actor: ", actorRemoteName);
+  DiagnosticOutputStream.sendln("SubQueue: ", subQueue);
+  DiagnosticOutputStream.sendln("Direction: ", direction);
+  DiagnosticOutputStream.sendln("Room: ", roomRemoteName);
+  DiagnosticOutputStream.sendln("Room SubQueue: ", roomSubQueue);
+
+  DiagnosticOutputStream.sendln("Actor compare ", actorRemoteName,":" , this->name);
+  if (strcmp(actorRemoteName, this->name) != 0) {
+	  DiagnosticOutputStream.sendln("Unknown actor name '", actorRemoteName, "'. Ignored");
+	  return;
+  }
   
   for(int i = 0; i < rooms && !find; i++) {
-    //Serial.println("Room to check: '" + roomsTable[i]->getRemoteName() + "'");
-	  if (strcmp(roomsTable[i]->getRemoteName(), roomRemoteName)) {
+	  DiagnosticOutputStream.sendln("Room to check: ", roomsTable[i]->getRemoteName());
+	  if (strcmp(roomsTable[i]->getRemoteName(), roomRemoteName) == 0) {
 		  roomsTable[i]->executeCommand(getSublocation(roomSubQueue), command);
 		  find = true;
 	  }
   }
-  //Serial.println("Rooms checked.");
+  DiagnosticOutputStream.sendln("Rooms checked.");
   if (!find) {
-	  Serial.print("There is no room in actor from command ");
-	  Serial.print(queue);
-	  Serial.print(" ");
-	  Serial.println(command);
+	  DiagnosticOutputStream.sendln("There is no room in actor from command ", queue, " ", command);
   }
 }
 
