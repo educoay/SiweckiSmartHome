@@ -1,5 +1,6 @@
 /*
-  Actor.h - Class for collection of points to be controlled in single room.
+  Actor is a physical device dedicated to control home active objects. Those objects can be grouped logically and usualy are grouped in Rooms. Actor must be able to manage Rooms and dispatch command sent by Controller to appropriate Room.
+
   Created by Piotr Kaminski, 2015/07/12.
 */
 
