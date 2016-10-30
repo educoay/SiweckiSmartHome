@@ -14,6 +14,9 @@
 #include "Point.h"
 #include "Room.h"
 
+/*
+Define max number of Rooms which Actor can manage.
+*/
 #define ACTOR_MAX_ROOMS 20
 
 class Actor: public ObjectRemotelyControlled {
@@ -24,6 +27,9 @@ class Actor: public ObjectRemotelyControlled {
     Room *roomsTable[ACTOR_MAX_ROOMS];
  
   public:
+
+/* Public constructor to create Actor. As parameter Actor name musr be provided.
+*/
     Actor(const char* name);
     virtual ~Actor();
     void addRoom(Room* point);
