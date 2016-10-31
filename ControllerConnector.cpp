@@ -19,7 +19,7 @@ ControllerConnector::~ControllerConnector() {
 }
 
 void ControllerConnector::initialize(const char* connectivityClientName) {
-  Serial.println("ControllerConnector init... ");
+  Serial.println("CtrConn init");
 
   //make a copy of clientName
   delete this->clientName;
@@ -44,7 +44,7 @@ void ControllerConnector::initialize(const char* connectivityClientName) {
   DiagnosticOutputStream.sendln("Queue: ", this->listenQueueRange);
   
   initializeMqtt();
-  DiagnosticOutputStream.sendln("ControllerConnector init done.");
+  DiagnosticOutputStream.sendln("CtrConn init done");
 }
 
  
@@ -55,12 +55,12 @@ void ControllerConnector::initializeMqtt()
     if (mqttClient->connect(this->clientName, this->mqttServerUsername, this->mqttServerPassword)) {
       DiagnosticOutputStream.sendln("Subscribe queue range: ", this->listenQueueRange);
       mqttClient->subscribe(this->listenQueueRange);
-      DiagnosticOutputStream.sendln("MQTT connect OK");
+      DiagnosticOutputStream.sendln("MQTT conn OK");
     } else {
-    	DiagnosticOutputStream.sendln("MQTT connect failed");
+    	DiagnosticOutputStream.sendln("MQTT conn failed");
     }
   } else {
-	  DiagnosticOutputStream.sendln("mqttClient is null");
+	  DiagnosticOutputStream.sendln("no mqttClient");
   }
 }
 
@@ -69,15 +69,15 @@ boolean ControllerConnector::checkOutstandingMessages() {
 }
 
 void ControllerConnector::sendCommand(char* queue, char* command) {
-  DiagnosticOutputStream.sendln("Command to send: ", queue, " ", command);
+  DiagnosticOutputStream.sendln("Comm to send: ", queue, " ", command);
 
   if (!mqttClient->connected()) {
      initializeMqtt();
   }
   
   if (mqttClient->publish(queue, command)) {
-	  DiagnosticOutputStream.sendln("Command ", queue, " published.");
+	  DiagnosticOutputStream.sendln("Comm ", queue, " pub");
   } else {
-	  DiagnosticOutputStream.sendln("Command ", queue, " publish failed.");
+	  DiagnosticOutputStream.sendln("Comm ", queue, " pub failed.");
   } 
 }

@@ -18,6 +18,7 @@ Room::~Room() {
 }
 
 void Room::addPoint(Point* point) {
+  //TODO check if ROOM_MAX_POINTS exceeded.
   point->setParent(this);
   pointsTable[points] = point;
   points++;
@@ -43,23 +44,23 @@ char* Room::createCommand(int state, char* command) {
   return command;
 }
 
-void Room::executeCommand(const char* objectFullRemoteName, const char* command) {
-  DiagnosticOutputStream.sendln("ObjectFullRemoteName: ",objectFullRemoteName);
+void Room::executeCommand(const char* remoteName, const char* command) {
+  DiagnosticOutputStream.sendln("ObjectFullRemoteName: ",remoteName);
 
   char pointRemoteName[NAME_LIMIT];
-  getTopHierarchyName(objectFullRemoteName, pointRemoteName);
+  getTopHierarchyName(remoteName, pointRemoteName);
   DiagnosticOutputStream.sendln("Point Name: ",pointRemoteName);
 
   bool find = false;
 
   for(int i = 0; i < points && !find; i++) {
     if (strcmp(pointsTable[i]->getRemoteName(), pointRemoteName) == 0) {
-      pointsTable[i]->executeCommand(objectFullRemoteName, command);
+      pointsTable[i]->executeCommand(remoteName, command);
       find = true;
     }
   }
   if (!find) {
-	DiagnosticOutputStream.sendln("There is no point ", pointRemoteName, " from command ", objectFullRemoteName);
+	DiagnosticOutputStream.sendln("There is no point ", pointRemoteName, " from command ", remoteName);
   }
 }
 

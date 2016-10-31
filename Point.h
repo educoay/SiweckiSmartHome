@@ -4,10 +4,10 @@
 #include "ObjectRemotelyControlled.h"
 
 /**
-	Defines single point in installation. Points can be:
+	Defines single point in physical infrastructure of facility. Points can be:
 	<ol>
 		<li>active - execute commands like light (on/off), blind (open, close)</li>
-		<li>passive - do not execute commands but obly pass data like thermometer (read temperature)</li>
+		<li>passive - do not execute commands but only pass data like thermometer (read temperature)</li>
 	</ol>
 
   Created by Piotr Kaminski, 2015/07/12.

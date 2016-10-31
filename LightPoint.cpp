@@ -74,12 +74,12 @@ char* LightPoint::createCommand(char* command) {
   return createCommand(this->lightPointState, command);
 }
 
-void LightPoint::executeCommand(const char* objectFullRemoteName, const char* command) {
+void LightPoint::executeCommand(const char* remoteName, const char* command) {
   if (strcmp(command, COMMAND_ON) == 0) {
       setLightPointOn();
   } else if (strcmp(command, COMMAND_OFF) == 0) {
       setLightPointOff();
   } else {
-    DiagnosticOutputStream.sendln("Unknown action '", command, "' for point ", objectFullRemoteName);
+    DiagnosticOutputStream.sendln("Unknown action '", command, "' for point ", remoteName);
   };
 }

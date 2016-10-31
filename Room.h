@@ -27,7 +27,7 @@ class Room: public ObjectRemotelyControlled {
     virtual void verifyControlPoints();
     virtual char* createCommand(char* command);
     virtual char* createCommand(int state, char* command);
-    virtual void executeCommand(const char* objectFullRemoteName, const char* command);
+    virtual void executeCommand(const char* remoteName, const char* command);
 };
 
 #endif

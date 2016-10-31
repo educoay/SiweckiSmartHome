@@ -1,0 +1,41 @@
+{
+	"Home": {
+		"Config": {
+			"InstanceName": "Ard1",
+			"Debug": true,
+			"Mac": "00:12:FB:95:59:CF",
+			"MQTT-IP": "192.168.1.190",
+			"MQTT-Port": "1883"
+		},
+		"Rooms": [
+			{
+				"Name": "LivingRoom",
+				"Points": [
+					{
+						"Name": "Ceiling1",
+						"Type": "Light",
+						"ControlPin": 2,
+						"ButtonPin": 3
+					},
+					{
+						"Name": "Ceiling2",
+						"Type": "Light",
+						"ControlPin": 4,
+						"ButtonPin": 5
+					}
+				]
+			},
+			{
+				"Name": "Corridor",
+				"Points": [
+					{
+						"Name": "Ceiling1",
+						"Type": "Light",
+						"ControlPin": 6,
+						"ButtonPin": 7
+					}
+				]
+			}
+		]
+	}
+}

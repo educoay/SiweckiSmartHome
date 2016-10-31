@@ -29,7 +29,7 @@ class ObjectRemotelyControlled {
      */
     ObjectRemotelyControlled(const char* _name) { this->name = strdup(_name);};
     
-    /**p
+    /**
      * Virtual destructor to allow clean up for any children of this object.
      */
     virtual ~ObjectRemotelyControlled() { delete this->name;};
@@ -110,9 +110,9 @@ class ObjectRemotelyControlled {
 
     /**
      * Execution of command on object. Function responsible to verify given object is object which should
-     * respond to command (by object full name) and perform execution.
+     * respond to command (by object full or relative name) and perform execution.
      */
-    virtual void executeCommand(const char* objectFullRemoteName, const char* command) = 0;
+    virtual void executeCommand(const char* remoteName, const char* command) = 0;
 
 };
 

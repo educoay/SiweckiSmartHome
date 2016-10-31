@@ -48,7 +48,7 @@ void ObjectRemotelyControlled::sendStateUpdate() {
 	  controllerConnector->sendCommand(objectFullRemoteName, createCommand(command));
 	  delete objectFullRemoteName;
 	  delete command;
-	  DiagnosticOutputStream.sendln("Update sent.");
+	  DiagnosticOutputStream.sendln("Update sent");
   } else {
 	  DiagnosticOutputStream.sendln("No connector, update skipped");
   }

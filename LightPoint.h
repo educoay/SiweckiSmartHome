@@ -27,7 +27,7 @@ class LightPoint: public Point {
 		void setLightPointOn();
 		boolean isLightPointOn();
 		void setLightPointOff();
-		virtual void executeCommand(const char* objectFullRemoteName, const char* command);
+		virtual void executeCommand(const char* remoteName, const char* command);
 		virtual char* createCommand(char* command);
 		virtual char* createCommand(int state,  char* command);
 		virtual void verifyControlPoint();

@@ -18,6 +18,7 @@ Actor::~Actor() {
 }
 
 void Actor::addRoom(Room* room) {
+  //TODO check if ACTOR_MAX_ROOMS exceeded.
   room->setParent(this);
   roomsTable[rooms] = room;
   rooms++;
@@ -60,14 +61,14 @@ char* Actor::createCommand(int state, char* command) {
   return command;
 }
 
-void Actor::executeCommand(const char* queue, const char* command) {
+void Actor::executeCommand(const char* remoteName, const char* command) {
 	//get Actor name form queue /Adr0/Out/Room1/Point1 -> Adr0
 	char actorRemoteName[NAME_LIMIT];
-	getTopHierarchyName(queue, actorRemoteName);
+	getTopHierarchyName(remoteName, actorRemoteName);
 
 	//get name of queue which indicates direction
 	// /Adr0/In/Room1/Point1 -> /In/Room1/Point1
-	char* subQueue = getSublocation(queue);
+	char* subQueue = getSublocation(remoteName);
 	char direction[NAME_LIMIT];
 	// /In/Room1/Point1 -> In
 	getTopHierarchyName(subQueue, direction);
@@ -89,7 +90,7 @@ void Actor::executeCommand(const char* queue, const char* command) {
 */
 
   if (strcmp(actorRemoteName, this->name) != 0) {
-	  DiagnosticOutputStream.sendln("Unknown actor name '", actorRemoteName, "'. Ignored");
+	  DiagnosticOutputStream.sendln("Unknown act name ", actorRemoteName, ". Ignored");
 	  return;
   }
   
@@ -99,9 +100,9 @@ void Actor::executeCommand(const char* queue, const char* command) {
 		  find = true;
 	  }
   }
-  DiagnosticOutputStream.sendln("Rooms checked.");
+  DiagnosticOutputStream.sendln("Rooms checked");
   if (!find) {
-	  DiagnosticOutputStream.sendln("There is no room in actor from command ", queue, " ", command);
+	  DiagnosticOutputStream.sendln("No room in act from comm ", remoteName, " ", command);
   }
 }
 

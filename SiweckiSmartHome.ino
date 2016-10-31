@@ -7,6 +7,7 @@
 #include "LightPoint.h"
 #include "Configuration.h"
 #include "GeneralOutputStream.h"
+#include "ConfigurationReader.h"
 
 const char* ACTOR_NAME = "Ard1";
 const char* LIVINGROOM_NAME = "LivingRoom";
@@ -17,7 +18,6 @@ const char* CEILING_NAME = "Ceiling";
 const int CEILING_BUTTON_PIN = 6;
 const int CEILING_OUTPUT_PIN = 7;
 
-byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
 byte mqttServerIP[4] = {192, 168, 1, 190};
 int mqttServerPort = 1883;
 
@@ -38,19 +38,23 @@ int i = 0;
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
   char* command = (char*)payload;
-  Serial.print("Queue: ");
-  Serial.println(topic);
-  Serial.print("Message received: ");
-  Serial.println(command);
+  DiagnosticOutputStream.sendln("Queue: ", topic, "Msg rcv: ", command);
   actor.executeCommand(topic, command);
-  Serial.println("Callback finished.");
+  DiagnosticOutputStream.sendln("Callbck fin");
 }
  
 void setup() {
+
   Serial.begin(9600);
   DiagnosticOutputStream.setSendToSerial(config.isDebug);
-  DiagnosticOutputStream.sendln("Setup begin...");
-  Ethernet.begin(mac);
+  DiagnosticOutputStream.sendln("Setup begin");
+
+  ConfigurationReader configurationReader;
+  if (!configurationReader.setConfiguraionFromFile(&actor, &config)) {
+	  return;
+  }
+
+  Ethernet.begin(config.mac);
   controllerConnector.setMqttClient(&mqttClient);
   controllerConnector.initialize(ACTOR_NAME);
   Room *livingRoom = new Room(LIVINGROOM_NAME);
@@ -76,16 +80,16 @@ void setup() {
 	  delete corridorFullRemoteName;
   }
 
-  DiagnosticOutputStream.sendln("Actor init... ");
+  DiagnosticOutputStream.sendln("Act init");
   actor.initialize();
-  DiagnosticOutputStream.sendln("Init done.");
+  DiagnosticOutputStream.sendln("Init done");
 }
  
 void loop() {
-  //Serial.print("Loop... "); Serial.println(i++);
-  actor.verifyControlPoints();
-  mqttClient.loop();
-  delay(AFTER_CHANGE_DELAY);
+	//Serial.print("Loop... "); Serial.println(i++);
+	actor.verifyControlPoints();
+	mqttClient.loop();
+	delay(AFTER_CHANGE_DELAY);
 }
 
 
