@@ -38,9 +38,9 @@ int i = 0;
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
   char* command = (char*)payload;
-  DiagnosticOutputStream.sendln("Queue: ", topic, "Msg rcv: ", command);
+  //DiagnosticOutputStream.sendln("Queue: ", topic, "Msg rcv: ", command);
   actor.executeCommand(topic, command);
-  DiagnosticOutputStream.sendln("Callbck fin");
+  //DiagnosticOutputStream.sendln("Callbck fin");
 }
  
 void setup() {
@@ -50,13 +50,15 @@ void setup() {
   DiagnosticOutputStream.sendln("Setup begin");
 
   ConfigurationReader configurationReader;
-  if (!configurationReader.setConfiguraionFromFile(&actor, &config)) {
+  if (!configurationReader.readConfigurationFromFile(&actor, &config)) {
+	  DiagnosticOutputStream.sendln("Setup exit");
 	  return;
   }
 
   Ethernet.begin(config.mac);
   controllerConnector.setMqttClient(&mqttClient);
   controllerConnector.initialize(ACTOR_NAME);
+  /*
   Room *livingRoom = new Room(LIVINGROOM_NAME);
   ceiling = new LightPoint(CEILING_BUTTON_PIN, CEILING_OUTPUT_PIN, CEILING_NAME);
   corridor = new LightPoint(CORRIDOR_BUTTON_PIN, CORRIDOR_OUTPUT_PIN, CORRIDOR_NAME);
@@ -79,6 +81,7 @@ void setup() {
 	  DiagnosticOutputStream.sendln("corridor: ", corridorFullRemoteName);
 	  delete corridorFullRemoteName;
   }
+  */
 
   DiagnosticOutputStream.sendln("Act init");
   actor.initialize();

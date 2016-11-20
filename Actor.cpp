@@ -100,7 +100,7 @@ void Actor::executeCommand(const char* remoteName, const char* command) {
 		  find = true;
 	  }
   }
-  DiagnosticOutputStream.sendln("Rooms checked");
+  //DiagnosticOutputStream.sendln("Rooms checked");
   if (!find) {
 	  DiagnosticOutputStream.sendln("No room in act from comm ", remoteName, " ", command);
   }

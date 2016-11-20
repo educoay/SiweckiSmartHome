@@ -21,18 +21,23 @@
 
 class ConfigurationReader {
 private:
-	void readHome(File* myFile, Actor* actor, Configuration* config);
-	void readConfig(File* myFile, Configuration* config);
-	void readRooms(File* myFile, Actor* actor);
-	void readRoom(File* myFile, Actor* actor);
-	void readPoints(File* myFile, Room* actor);
-	void readPoint(File* myFile, Room* actor);
+	void skipTillChar(File* file, char charToSkip, short numOfChars);
+	bool readToBuffer(File* file, char* fileContentBuffer);
+	bool readToBufferTillChar(File* file, char* fileContentBuffer, char charToStop);
+
+	bool readHome(File* myFile, char* fileContentBuffer, Actor* actor, Configuration* config);
+
+	void readConfig(File* myFile, char* fileContentBuffer, Configuration* config);
+	void readRooms(File* myFile, char* fileContentBuffer, Actor* actor);
+	void readRoom(File* myFile, char* fileContentBuffer, Actor* actor);
+	void readPoints(File* myFile, char* fileContentBuffer, Room* actor);
+	void readPoint(File* myFile, char* fileContentBuffer, Room* actor);
 
 public:
 	ConfigurationReader();
 	virtual ~ConfigurationReader();
 
-	bool readConfiguraionFromFile(Actor* actor, Configuration* config);
+	bool readConfigurationFromFile(Actor* actor, Configuration* config);
 };
 
 #endif /* CONFIGURATIONREADER_H_ */
