@@ -44,6 +44,19 @@ void GeneralOutputStream::sendln(const char * value1, const char * value2, const
 	}
 }
 
+void GeneralOutputStream::sendln(const char * value1, int value2, int value3, int value4, int value5, int value6 , int value7) {
+	if (value1 != NULL && sendToSerial) {
+				Serial.print(value1);
+	}
+	Serial.print(';');Serial.print(value2);
+	Serial.print(';');Serial.print(value3);
+	Serial.print(';');Serial.print(value4);
+	Serial.print(';');Serial.print(value5);
+	Serial.print(';');Serial.print(value6);
+	Serial.print(';');Serial.print(value7);
+	Serial.println();
+}
+
 
 
 

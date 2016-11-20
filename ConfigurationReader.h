@@ -18,20 +18,15 @@
 #include "Actor.h"
 #include "Room.h"
 #include "Configuration.h"
+#include "ArduinoJson.h"
 
 class ConfigurationReader {
 private:
-	void skipTillChar(File* file, char charToSkip, short numOfChars);
 	bool readToBuffer(File* file, char* fileContentBuffer);
-	bool readToBufferTillChar(File* file, char* fileContentBuffer, char charToStop);
-
 	bool readHome(File* myFile, char* fileContentBuffer, Actor* actor, Configuration* config);
-
-	void readConfig(File* myFile, char* fileContentBuffer, Configuration* config);
-	void readRooms(File* myFile, char* fileContentBuffer, Actor* actor);
-	void readRoom(File* myFile, char* fileContentBuffer, Actor* actor);
-	void readPoints(File* myFile, char* fileContentBuffer, Room* actor);
-	void readPoint(File* myFile, char* fileContentBuffer, Room* actor);
+	void readConfig(JsonObject& , Configuration* config);
+	void readRooms(JsonArray& rooms, Actor* actor);
+	void readPoints(JsonArray& points, Room* actor);
 
 public:
 	ConfigurationReader();

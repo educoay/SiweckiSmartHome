@@ -12,8 +12,8 @@
 
 class Configuration {
 public:
-	byte mac[6] = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
-	unsigned int mqttServerIP[4] = {192, 168, 1, 190};
+	byte mac[6];// = {0x00, 0x12, 0xFB, 0x95, 0x59, 0xCF};
+	unsigned int mqttServerIP[4]; // = {192, 168, 1, 190};
 	int mqttServerPort = 1883;
 	bool isDebug = true;
 
