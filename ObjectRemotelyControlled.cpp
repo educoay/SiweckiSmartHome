@@ -2,6 +2,19 @@
 #include "Const.h"
 #include "GeneralOutputStream.h"
 
+ObjectRemotelyControlled::ObjectRemotelyControlled() {
+	this->name = NULL;
+}
+
+ObjectRemotelyControlled::ObjectRemotelyControlled(const char* name) {
+	this->name = strdup(name);
+}
+
+void ObjectRemotelyControlled::setName(char* name) {
+	delete this->name;
+	this->name = strdup(name);
+}
+
 char* ObjectRemotelyControlled::getFullRemoteName(char* fullRemoteName) {
 	if (this->parent != NULL) {
 				parent->getFullRemoteName(fullRemoteName);

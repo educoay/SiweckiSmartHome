@@ -13,6 +13,10 @@ Configuration::Configuration() {
 }
 
 Configuration::~Configuration() {
-	// TODO Auto-generated destructor stub
+	delete this->instanceName;
+}
+
+void Configuration::setInstanceName(char* _name) {
+	this->instanceName = strdup(_name);
 }
 

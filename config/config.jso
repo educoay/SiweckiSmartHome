@@ -12,16 +12,16 @@
 				"Name": "LivingRoom",
 				"Points": [
 					{
-						"Name": "Ceiling1",
+						"Name": "Ceiling",
 						"Type": "Light",
 						"CtrPin": 2,
 						"BtnPin": 3
 					},
 					{
-						"Name": "Ceiling2",
+						"Name": "Corridor",
 						"Type": "Light",
-						"CtrPin": 4,
-						"BtnPin": 5
+						"CtrPin": 6,
+						"BtnPin": 7
 					}
 				]
 			},

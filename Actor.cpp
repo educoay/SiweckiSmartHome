@@ -2,6 +2,13 @@
 #include "Const.h"
 #include "GeneralOutputStream.h"
 
+Actor::Actor():ObjectRemotelyControlled() {
+  rooms = 0;
+  for(int i = 0; i < ACTOR_MAX_ROOMS; i++){
+    roomsTable[i] = NULL;
+  }
+}
+
 Actor::Actor(const char* name):ObjectRemotelyControlled(name) {
   rooms = 0;
   for(int i = 0; i < ACTOR_MAX_ROOMS; i++){

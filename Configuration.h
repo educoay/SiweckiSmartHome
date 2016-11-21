@@ -16,9 +16,11 @@ public:
 	unsigned int mqttServerIP[4]; // = {192, 168, 1, 190};
 	int mqttServerPort = 1883;
 	bool isDebug = true;
+	char* instanceName;
 
 	Configuration();
-	virtual ~Configuration();
+	virtual ~Configuration() ;
+	void setInstanceName(char* _name);
 };
 
 #endif /* CONFIGURATION_H_ */

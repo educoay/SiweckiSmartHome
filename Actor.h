@@ -30,6 +30,12 @@ class Actor: public ObjectRemotelyControlled {
  
   public:
 
+    /*
+     * Public constructor to create anonymous actor. Actor name may be set during configuration set from
+     * source.
+     */
+    Actor();
+
 	/*
 	 * Public constructor to create Actor. As parameter Actor name must be provided.
 	 */

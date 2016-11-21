@@ -70,12 +70,13 @@ bool ConfigurationReader::readHome(File* file, char* fileContentBuffer, Actor* a
 	  return false;
 	}
 	readConfig(root, config);
-	JsonArray& jsonRooms = root[JSON_ROOMS].asArray();
+	JsonArray& jsonRooms = root[JSON_HOME][JSON_ROOMS].asArray();
 	readRooms(jsonRooms, actor);
 }
 
 
 void ConfigurationReader::readConfig(JsonObject& root, Configuration* config) {
+	config->setInstanceName(root[JSON_HOME][JSON_CONFIG][JSON_INSTANCE_NAME]);
 	config->isDebug 		= root[JSON_HOME][JSON_CONFIG][JSON_DEBUG];
 	//DiagnosticOutputStream.sendln("debug", config->isDebug ? "ok" : "nok");
 
@@ -130,6 +131,7 @@ void ConfigurationReader::readRooms(JsonArray& rooms, Actor* actor) {
 	Room *room;
 	for(JsonArray::iterator it=rooms.begin(); it!=rooms.end(); ++it)
 	{
+		DiagnosticOutputStream.sendln("Room found");
 	    JsonObject &jsonRoom = it->asObject();
 	    name = jsonRoom[JSON_ROOM_NAME];
 	    room = new Room(name);
@@ -147,6 +149,7 @@ void ConfigurationReader::readPoints(JsonArray& points, Room* room) {
 	int ctrPin, btnPin;
 	for(JsonArray::iterator it=points.begin(); it!=points.end(); ++it)
 	{
+		DiagnosticOutputStream.sendln("Point found");
 	    JsonObject &jsonPoint = it->asObject();
 	    name = jsonPoint[JSON_POINT_NAME];
 	    type = jsonPoint[JSON_POINT_TYPE];

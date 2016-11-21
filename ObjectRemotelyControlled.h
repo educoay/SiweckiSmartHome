@@ -25,14 +25,24 @@ class ObjectRemotelyControlled {
     
   public:
     /**
+     * Constructor to create empty object.
+     */
+    ObjectRemotelyControlled();
+
+    /**
      * Constructor to force giving a name to controlled objects.
      */
-    ObjectRemotelyControlled(const char* _name) { this->name = strdup(_name);};
+    ObjectRemotelyControlled(const char* name);
     
     /**
      * Virtual destructor to allow clean up for any children of this object.
      */
     virtual ~ObjectRemotelyControlled() { delete this->name;};
+
+    /**
+     * Set object local name;
+     */
+    void setName(char* name);
 
     /**
      * Set parent object to create hierarchy
