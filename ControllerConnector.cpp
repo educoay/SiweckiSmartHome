@@ -50,7 +50,6 @@ void ControllerConnector::initialize(const char* connectivityClientName) {
  
 void ControllerConnector::initializeMqtt()
 {
-  Serial.println("Init MQTT...");
   if (this->mqttClient != NULL) {
     if (mqttClient->connect(this->clientName, this->mqttServerUsername, this->mqttServerPassword)) {
       DiagnosticOutputStream.sendln("Subscribe queue range: ", this->listenQueueRange);
