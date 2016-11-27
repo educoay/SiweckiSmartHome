@@ -15,38 +15,37 @@ void GeneralOutputStream::setSendToSerial(bool value) {
 }
 
 void GeneralOutputStream::sendln(const char * value) {
-	sendln(value, NULL, NULL, NULL);
+	send(value);
+	sendln();
 }
 
 void GeneralOutputStream::sendln(const char * value1, const char * value2) {
-	sendln(value1, value2, NULL, NULL);
+	send(value1, value2);
+	sendln();
 }
 
 void GeneralOutputStream::sendln(const char * value1, const char * value2, const char * value3) {
-	sendln(value1, value2, value3, NULL);
+	send(value1, value2, value3);
+	sendln();
 }
 
 void GeneralOutputStream::sendln(const char * value1, const char * value2, const char * value3, const char * value4) {
-	if (value1 != NULL && sendToSerial) {
-				Serial.print(value1);
-	}
-	if (value2 != NULL && sendToSerial) {
-				Serial.print(value2);
-	}
-	if (value3 != NULL && sendToSerial) {
-				Serial.print(value3);
-	}
-	if (value4 != NULL && sendToSerial) {
-				Serial.print(value4);
-	}
-	if (sendToSerial) {
-		Serial.println();
-	}
+	send(value1, value2, value3, value4);
+	sendln();
+}
+
+void GeneralOutputStream::sendln(const char * value1, const char * value2, const char * value3, int value4) {
+	send(value1, value2, value3);
+	send(value4);
+	sendln();
 }
 
 void GeneralOutputStream::sendln(const char * value1, int value2, int value3, int value4, int value5, int value6 , int value7) {
-	if (value1 != NULL && sendToSerial) {
-				Serial.print(value1);
+	if (!sendToSerial) {
+		return;
+	}
+	if (value1 != NULL) {
+		Serial.print(value1);
 	}
 	Serial.print(';');Serial.print(value2);
 	Serial.print(';');Serial.print(value3);
@@ -57,6 +56,68 @@ void GeneralOutputStream::sendln(const char * value1, int value2, int value3, in
 	Serial.println();
 }
 
+void GeneralOutputStream::send(const char * value) {
+	if (sendToSerial) {
+		Serial.print(value);
+	}
+}
+
+void GeneralOutputStream::send(const int value) {
+	if (sendToSerial) {
+		Serial.print(value);
+	}
+}
+
+void GeneralOutputStream::sendln() {
+	if (sendToSerial) {
+		Serial.println();
+	}
+}
+
+void GeneralOutputStream::send(const char * value1, const char * value2) {
+	if (!sendToSerial) {
+		return;
+	}
+	if (value1 != NULL) {
+		Serial.print(value1);
+	}
+	if (value2 != NULL) {
+		Serial.print(value2);
+	}
+}
+
+void GeneralOutputStream::send(const char * value1, const char * value2, const char * value3) {
+	if (!sendToSerial) {
+		return;
+	}
+	if (value1 != NULL) {
+		Serial.print(value1);
+	}
+	if (value2 != NULL) {
+		Serial.print(value2);
+	}
+	if (value3 != NULL) {
+		Serial.print(value3);
+	}
+}
+
+void GeneralOutputStream::send(const char * value1, const char * value2, const char * value3, const char * value4) {
+	if (!sendToSerial) {
+		return;
+	}
+	if (value1 != NULL) {
+		Serial.print(value1);
+	}
+	if (value2 != NULL) {
+		Serial.print(value2);
+	}
+	if (value3 != NULL) {
+		Serial.print(value3);
+	}
+	if (value4 != NULL) {
+		Serial.print(value4);
+	}
+}
 
 
 

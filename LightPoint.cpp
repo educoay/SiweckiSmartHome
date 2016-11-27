@@ -83,3 +83,13 @@ void LightPoint::executeCommand(const char* remoteName, const char* command) {
     DiagnosticOutputStream.sendln("Unknown action '", command, "' for point ", remoteName);
   };
 }
+
+void LightPoint::printDiagnosticInfo() {
+	//LP: name, parent: name, btn: x, out: y, ctr:Y
+	DiagnosticOutputStream.send("LP parent:", this->parent->getRemoteName(), ", name: ", this->name);
+	DiagnosticOutputStream.send(", btn:");
+	DiagnosticOutputStream.send(this->controlButtonPin);
+	DiagnosticOutputStream.send(", out:");
+	DiagnosticOutputStream.send(this->controlOutputPin);
+	DiagnosticOutputStream.sendln(", ctr: ", this->controllerConnector == NULL ? "N" : "Y");
+}

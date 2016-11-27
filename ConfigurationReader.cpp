@@ -131,7 +131,6 @@ void ConfigurationReader::readRooms(JsonArray& rooms, Actor* actor) {
 	Room *room;
 	for(JsonArray::iterator it=rooms.begin(); it!=rooms.end(); ++it)
 	{
-		DiagnosticOutputStream.sendln("Room found");
 	    JsonObject &jsonRoom = it->asObject();
 	    name = jsonRoom[JSON_ROOM_NAME];
 	    room = new Room(name);
@@ -149,7 +148,6 @@ void ConfigurationReader::readPoints(JsonArray& points, Room* room) {
 	int ctrPin, btnPin;
 	for(JsonArray::iterator it=points.begin(); it!=points.end(); ++it)
 	{
-		DiagnosticOutputStream.sendln("Point found");
 	    JsonObject &jsonPoint = it->asObject();
 	    name = jsonPoint[JSON_POINT_NAME];
 	    type = jsonPoint[JSON_POINT_TYPE];
@@ -158,8 +156,9 @@ void ConfigurationReader::readPoints(JsonArray& points, Room* room) {
 
 	    if (strcmp(type, JSON_POINT_TYPE_LIGHT) == 0) {
 	    	point = new LightPoint(ctrPin, btnPin, name);
+	    	room->addPoint(point);
+	    	point->printDiagnosticInfo();
 	    }
-	    room->addPoint(point);
 	}
 }
 

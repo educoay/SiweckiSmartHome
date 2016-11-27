@@ -15,10 +15,17 @@ private:
 
 public:
 	void setSendToSerial(bool value);
+	void send(const char * value);
+	void send(const int value);
+	void send(const char * value1, const char * value2);
+	void send(const char * value1, const char * value2, const char * value3);
+	void send(const char * value1, const char * value2, const char * value3, const char * value4);
+	void sendln();
 	void sendln(const char * value);
 	void sendln(const char * value1, const char * value2);
 	void sendln(const char * value1, const char * value2, const char * value3);
 	void sendln(const char * value1, const char * value2, const char * value3, const char * value4);
+	void sendln(const char * value1, const char * value2, const char * value3, int value4);
 	void sendln(const char * value1, int value2, int value3, int value4, int value5, int value6, int value7);
 };
 

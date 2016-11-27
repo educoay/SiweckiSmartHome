@@ -31,6 +31,7 @@ class LightPoint: public Point {
 		virtual char* createCommand(char* command);
 		virtual char* createCommand(int state,  char* command);
 		virtual void verifyControlPoint();
+		virtual void printDiagnosticInfo();
 };
 
 #endif

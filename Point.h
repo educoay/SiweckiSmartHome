@@ -20,6 +20,7 @@ class Point: public ObjectRemotelyControlled {
     virtual void initialize() = 0;
     virtual boolean isControlButtonPressed() = 0;
     virtual void verifyControlPoint() = 0;
+    virtual void printDiagnosticInfo() = 0;
 };
 
 #endif
