@@ -31,6 +31,13 @@ void Actor::addRoom(Room* room) {
   rooms++;
 }
 
+void Actor::setControllerConnector(ControllerConnector* _controllerConnector) {
+	ObjectRemotelyControlled::setControllerConnector(_controllerConnector);
+	for(int i = 0; i < rooms; i++){
+		roomsTable[i]->setControllerConnector(_controllerConnector);
+	};
+}
+
 void Actor::initialize() {
   for(int i = 0; i < rooms; i++){
     roomsTable[i]->initialize();

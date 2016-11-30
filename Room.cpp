@@ -30,6 +30,13 @@ void Room::addPoint(Point* point) {
   points++;
 }
 
+void Room::setControllerConnector(ControllerConnector* _controllerConnector) {
+	ObjectRemotelyControlled::setControllerConnector(_controllerConnector);
+	for(int i = 0; i < points; i++){
+		pointsTable[i]->setControllerConnector(_controllerConnector);
+	};
+}
+
 void Room::initialize() {
   for(int i = 0; i < points; i++) {
     pointsTable[i]->initialize();

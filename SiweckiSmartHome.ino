@@ -25,7 +25,7 @@ PubSubClient mqttClient = PubSubClient(mqttServerIP, mqttServerPort, callback, e
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
   char* command = (char*)payload;
-  DiagnosticOutputStream.sendln("Queue: ", topic, " Msg rcv: ", command);
+  DiagnosticOutputStream.sendln("Msg rcv: ", topic, ":", command);
   actor.executeCommand(topic, command);
   //DiagnosticOutputStream.sendln("Callbck fin");
 }
@@ -48,6 +48,7 @@ void setup() {
 
   DiagnosticOutputStream.sendln("Act init");
   actor.setName(config.instanceName);
+  actor.setControllerConnector(&controllerConnector);
   actor.initialize();
   DiagnosticOutputStream.sendln("Init done");
 }
@@ -58,7 +59,3 @@ void loop() {
 	delay(AFTER_CHANGE_DELAY);
 }
 
-
- 
-
- 

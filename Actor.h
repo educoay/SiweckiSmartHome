@@ -52,6 +52,11 @@ class Actor: public ObjectRemotelyControlled {
      */
     void addRoom(Room* point);
 
+    /**
+     * Set connector for communication with controller. Set controller for all childs in object tree.
+     */
+    virtual void setControllerConnector(ControllerConnector* _controllerConnector);
+
     /*
      * Dispatch to all managed Rooms verification points in terms of control operation being in progress
      * (e.g. pressing hardware button, rising event). This method is called in infinitive loop to give

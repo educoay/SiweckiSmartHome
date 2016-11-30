@@ -15,6 +15,10 @@ void ObjectRemotelyControlled::setName(char* name) {
 	this->name = strdup(name);
 }
 
+void ObjectRemotelyControlled::setControllerConnector(ControllerConnector* _controllerConnector) {
+	this->controllerConnector = _controllerConnector;
+}
+
 char* ObjectRemotelyControlled::getFullRemoteName(char* fullRemoteName) {
 	if (this->parent != NULL) {
 				parent->getFullRemoteName(fullRemoteName);
@@ -61,7 +65,6 @@ void ObjectRemotelyControlled::sendStateUpdate() {
 	  controllerConnector->sendCommand(objectFullRemoteName, createCommand(command));
 	  delete objectFullRemoteName;
 	  delete command;
-	  DiagnosticOutputStream.sendln("Update sent");
   } else {
 	  DiagnosticOutputStream.sendln("No connector, update skipped");
   }

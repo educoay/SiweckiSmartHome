@@ -26,7 +26,6 @@ boolean LightPoint::isControlButtonPressed() {
   if (buttonNow != this->buttonPreviousState) {
     this->buttonPreviousState = buttonNow;
     if(buttonNow == HIGH) {
-        //Serial.println(this->getFullRemoteName() + " button pressed");
         return true;
     };
   };

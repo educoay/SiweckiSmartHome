@@ -68,15 +68,13 @@ boolean ControllerConnector::checkOutstandingMessages() {
 }
 
 void ControllerConnector::sendCommand(char* queue, char* command) {
-  DiagnosticOutputStream.sendln("Comm to send: ", queue, " ", command);
-
   if (!mqttClient->connected()) {
      initializeMqtt();
   }
   
   if (mqttClient->publish(queue, command)) {
-	  DiagnosticOutputStream.sendln("Comm ", queue, " pub");
+	  DiagnosticOutputStream.sendln("Msg published: ", queue, ":", command);
   } else {
-	  DiagnosticOutputStream.sendln("Comm ", queue, " pub failed.");
+	  DiagnosticOutputStream.sendln("Msg pub failed: ", queue, ":", command);
   } 
 }

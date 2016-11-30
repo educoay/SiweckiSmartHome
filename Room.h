@@ -23,6 +23,12 @@ class Room: public ObjectRemotelyControlled {
     Room(const char* name);
     virtual ~Room();
     void addPoint(Point* point);
+
+    /**
+     * Set connector for communication with controller. Set controller for all childs in object tree.
+     */
+    virtual void setControllerConnector(ControllerConnector* _controllerConnector);
+
     virtual void initialize();
     virtual void verifyControlPoints();
     virtual char* createCommand(char* command);

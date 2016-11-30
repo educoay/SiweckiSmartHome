@@ -52,7 +52,7 @@ class ObjectRemotelyControlled {
     /**
      * Set connector for communication with controller.
      */
-    void setControllerConnector(ControllerConnector *_controllerConnector) {this->controllerConnector = _controllerConnector;};
+    virtual void setControllerConnector(ControllerConnector* _controllerConnector);
 
     /**
      * Gets name of top object in hierarchy described by full remote name.
