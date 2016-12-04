@@ -73,7 +73,7 @@ void ControllerConnector::sendCommand(char* queue, char* command) {
   }
   
   if (mqttClient->publish(queue, command)) {
-	  DiagnosticOutputStream.sendln("Msg published: ", queue, ":", command);
+	  DiagnosticOutputStream.sendln("Msg pub ok: ", queue, ":", command);
   } else {
 	  DiagnosticOutputStream.sendln("Msg pub failed: ", queue, ":", command);
   } 

@@ -9,32 +9,27 @@
 #include "GeneralOutputStream.h"
 #include "ConfigurationReader.h"
 
-byte mqttServerIP[4] = {192, 168, 1, 190};
-int mqttServerPort = 1883;
-
 const int AFTER_CHANGE_DELAY = 100;
 
 Configuration config;
-
 Actor actor = Actor();
 ControllerConnector controllerConnector = ControllerConnector();
 
 EthernetClient ethClient;
-PubSubClient mqttClient = PubSubClient(mqttServerIP, mqttServerPort, callback, ethClient);
+PubSubClient* mqttClient = NULL;
 
 void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
   char* command = (char*)payload;
   DiagnosticOutputStream.sendln("Msg rcv: ", topic, ":", command);
   actor.executeCommand(topic, command);
-  //DiagnosticOutputStream.sendln("Callbck fin");
 }
  
 void setup() {
 
   Serial.begin(9600);
   DiagnosticOutputStream.setSendToSerial(config.isDebug);
-  DiagnosticOutputStream.sendln("Setup begin");
+  DiagnosticOutputStream.sendln("<>-- Init begin --<>");
 
   ConfigurationReader configurationReader;
   if (!configurationReader.readConfigurationFromFile(&actor, &config)) {
@@ -43,19 +38,20 @@ void setup() {
   }
 
   Ethernet.begin(config.mac);
-  controllerConnector.setMqttClient(&mqttClient);
+  mqttClient = new PubSubClient(config.mqttServerIP, config.mqttServerPort, callback, ethClient);
+  controllerConnector.setMqttClient(mqttClient);
   controllerConnector.initialize(config.instanceName);
 
-  DiagnosticOutputStream.sendln("Act init");
+  DiagnosticOutputStream.sendln("Act init...");
   actor.setName(config.instanceName);
   actor.setControllerConnector(&controllerConnector);
   actor.initialize();
-  DiagnosticOutputStream.sendln("Init done");
+  DiagnosticOutputStream.sendln("<>-- Init done --<>");
 }
  
 void loop() {
 	actor.verifyControlPoints();
-	mqttClient.loop();
+	mqttClient->loop();
 	delay(AFTER_CHANGE_DELAY);
 }
 
